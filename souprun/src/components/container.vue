@@ -3,88 +3,88 @@
 </template>
 
 <script>
-let x = 500;
-let y = 20;
-let x2 = 1250;
-let choice = 0;
-let characters = ["/cat.png", "/bun.png"];
-let chara = characters[choice];
-
+let x = 500
+let y = 20
+let x2 = 1250
+let choice = 0
+let characters = ['/cat.png', '/bun.png']
+let chara = characters[choice]
 
 export default {
   props: {
     started: {
       type: Boolean,
-      default: false,
-    },
+      default: false
+    }
   },
   mounted() {
-    const canvas = this.$refs.canvas;
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
-    this.ctx = canvas.getContext("2d");
+    const canvas = this.$refs.canvas
+    canvas.width = window.innerWidth
+    canvas.height = window.innerHeight
+    this.ctx = canvas.getContext('2d')
 
-    this.newImage = new Image();
-    this.newImage.src = "/bowl.png";
-    this.bun = new Image();
-    this.bun.src = chara;
+    this.newImage = new Image()
+    this.newImage.src = '/bowl.png'
+    this.bun = new Image()
+    this.bun.src = chara
 
     this.bun.onload = () => {
-      this.animate();
-    };
+      this.animate()
+    }
     this.newImage.onload = () => {
-      this.animate();
-    };
+      this.animate()
+    }
   },
   methods: {
     startGame() {
-      console.log("start");
+      console.log('start')
     },
     animate() {
-      this.ctx.clearRect(0, 0, window.innerWidth, window.innerHeight);
-      this.ctx.drawImage(this.newImage, x, 0);
-      this.ctx.drawImage(this.bun, x2, y, 290, 200);
+      this.ctx.clearRect(0, 0, window.innerWidth, window.innerHeight)
+      this.ctx.drawImage(this.newImage, x, 0)
+      this.ctx.drawImage(this.bun, x2, y, 290, 200)
 
       if (y < 301) {
-        y += 5;
+        y += 5
       } else {
-        x -= 7;
+        x -= 7
         if (x2 >= 250) {
-          x2 -= 7;
+          x2 -= 7
         }
       }
 
       if (x >= -2100 && this.started) {
-        requestAnimationFrame(this.animate);
+        requestAnimationFrame(this.animate)
       }
     },
     clickedthebunny(event) {
-      const rect = this.$refs.canvas.getBoundingClientRect();
-      const clickX = event.clientX - rect.left;
-      const clickY = event.clientY - rect.top;
+      const clickX = event.clientX
+      const clickY = event.clientY
 
       if (
         clickX >= x2 &&
         clickX <= x2 + 290 &&
         clickY >= y &&
-        clickY <= y + 200 && this.started === false
+        clickY <= y + 200 &&
+        this.started === false
       ) {
-        choice += 1;
-        this.bun.src = characters[choice % characters.length];
+        choice += 1
+        this.bun.src = characters[choice % characters.length]
+        y = 20
       }
-    },
+    }
   },
   watch: {
     started: {
       immediate: true,
       handler(newValue, oldValue) {
-        console.log("Prop value changed:", newValue);
+        console.log('Prop value changed:', newValue)
 
         if (newValue) {
-          this.animate();
+          this.animate()
         }
-      },
-    },
-  },
-};
+      }
+    }
+  }
+}
 </script>
