@@ -7,7 +7,7 @@ let x = 500
 let y = 20
 let x2 = 1250
 let choice = 0
-let characters = ['/cat.png', '/bun.png']
+let characters = ['/cat.png', '/bun.png', '/hippo.png']
 let chara = characters[choice]
 
 export default {
@@ -68,8 +68,13 @@ export default {
         clickY <= y + 200 &&
         this.started === false
       ) {
-        choice += 1
-        this.bun.src = characters[choice % characters.length]
+        if (this.choice === 2) {
+          choice = 0
+        } else {
+          choice += 1
+        }
+        // choice += 1
+        // this.bun.src = characters[choice % characters.length]
         y = 20
       }
     }
