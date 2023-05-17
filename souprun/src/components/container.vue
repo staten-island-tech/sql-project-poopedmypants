@@ -34,8 +34,13 @@ export default {
     this.newImage.onload = () => {
       this.animate()
     }
+    window.addEventListener('resize', plsResize())
   },
   methods: {
+    plsResize() {
+      canvas.width = window.innerWidth
+      canvas.height = window.innerHeight
+    },
     startGame() {
       console.log('start')
     },
@@ -68,13 +73,8 @@ export default {
         clickY <= y + 200 &&
         this.started === false
       ) {
-        if (this.choice === 2) {
-          choice = 0
-        } else {
-          choice += 1
-        }
-        // choice += 1
-        // this.bun.src = characters[choice % characters.length]
+        choice += 1
+        this.bun.src = characters[choice % characters.length]
         y = 20
       }
     }
