@@ -17,37 +17,33 @@ export default {
       default: false
     }
   },
-  mounted() {
-    const canvas = this.$refs.canvas
-    canvas.width = window.innerWidth
-    canvas.height = window.innerHeight
-    this.ctx = canvas.getContext('2d')
-
-    this.newImage = new Image()
-    this.newImage.src = '/bowl.png'
-    this.bun = new Image()
-    this.bun.src = chara
-
-    this.bun.onload = () => {
-      this.animate()
-    }
-    this.newImage.onload = () => {
-      this.animate()
-    }
-    window.addEventListener('resize', plsResize())
-  },
   methods: {
-    plsResize() {
+    resize() {
+      const canvas = this.$refs.canvas
       canvas.width = window.innerWidth
       canvas.height = window.innerHeight
+      this.ctx = canvas.getContext('2d')
+
+      this.newImage = new Image()
+      this.newImage.src = '/bowl.png'
+      this.bun = new Image()
+      this.bun.src = chara
+
+      this.bun.onload = () => {
+        this.animate()
+      }
+      this.newImage.onload = () => {
+        this.animate()
+      }
     },
     startGame() {
       console.log('start')
     },
     animate() {
+      let extra = window.innerWidth + window.innerWidth
       this.ctx.clearRect(0, 0, window.innerWidth, window.innerHeight)
       this.ctx.drawImage(this.newImage, x, 0)
-      this.ctx.drawImage(this.bun, x2, y, 290, 200)
+      this.ctx.drawImage(this.bun, x2, y, 200, 150)
 
       if (y < 301) {
         y += 5
@@ -58,7 +54,7 @@ export default {
         }
       }
 
-      if (x >= -2100 && this.started) {
+      if (x >= -1900 && this.started) {
         requestAnimationFrame(this.animate)
       }
     },
@@ -90,6 +86,25 @@ export default {
         }
       }
     }
+  },
+  mounted() {
+    const canvas = this.$refs.canvas
+    canvas.width = window.innerWidth
+    canvas.height = window.innerHeight
+    this.ctx = canvas.getContext('2d')
+
+    this.newImage = new Image()
+    this.newImage.src = '/bowl.png'
+    this.bun = new Image()
+    this.bun.src = chara
+
+    this.bun.onload = () => {
+      this.animate()
+    }
+    this.newImage.onload = () => {
+      this.animate()
+    }
+    window.onresize = this.resize()
   }
 }
 </script>
