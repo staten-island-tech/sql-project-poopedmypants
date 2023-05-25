@@ -12,10 +12,23 @@ const supabase = createClient('https://xyzcompany.supabase.co', 'public-anon-key
 interface Database {
   public: {
     Tables: {
-      movies: {
-        Row: {} // The data expected to be returned from a "select" statement.
-        Insert: {} // The data expected passed to an "insert" statement.
-        Update: {} // The data expected passed to an "update" statement.
+      users: {
+        Row: {
+const { data, error } = await supabase
+  .from('countries')
+  .select()
+        }
+        Insert: {
+const { error } = await supabase
+  .from('countries')
+  .insert({ id: 1, name: 'Denmark' })
+        }
+        Update: {
+const { error } = await supabase
+  .from('countries')
+  .update({ name: 'Australia' })
+  .eq('id', 1)
+        }
       }
     }
   }
