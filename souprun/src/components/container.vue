@@ -27,7 +27,8 @@ export default {
       avatarList: null,
       avatar: null,
       avatarIndex: 0,
-      newAvatarY: null
+      newAvatarY: null,
+      newAvatarX: null
     }
   },
   mounted() {
@@ -94,22 +95,23 @@ export default {
       this.avatarX = this.canvas.width / 1.5
       this.avatarY = this.conBottom - this.canvas.width * 0.1
       this.newAvatarY = this.conBottom + this.canvas.width * 0.05
+      this.newAvatarX = this.canvas.width / 8
     },
     makeStartButton() {
       this.startBtn = new Image()
-      this.startBtn.src = '/start.png' //placeholderrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr ahhhh
+      this.startBtn.src = '/sign.png' //placeholderrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr ahhhh
       this.startBtn.onload = () => {
         this.ctx.drawImage(
           this.startBtn,
           this.startBtnX,
-          this.startBtnY,
+          0,
           this.startBtnWidth,
           this.startBtnHeight
         )
       }
-      this.startBtnWidth = this.canvas.width / 4
-      this.startBtnHeight = this.canvas.width / 9
-      this.startBtnX = this.canvas.width * 0.09
+      this.startBtnWidth = this.canvas.width / 2.45
+      this.startBtnHeight = this.canvas.width / 1.7
+      this.startBtnX = this.canvas.width * 0.001
       this.startBtnY = this.conBottom + this.canvas.width * 0.23
     },
     startButtonClick(event) {
@@ -133,9 +135,11 @@ export default {
         clickY >= this.avatarY &&
         clickY <= this.avatarY + this.avatarHeight
       ) {
-        this.avatarIndex += 1
-        this.avatar.src = this.avatarList[this.avatarIndex % this.avatarList.length]
-        this.ctx.clearRect(this.avatarX, this.avatarY, this.avatarWidth, this.avatarHeight)
+        if (this.started === false) {
+          this.avatarIndex += 1
+          this.avatar.src = this.avatarList[this.avatarIndex % this.avatarList.length]
+          this.ctx.clearRect(this.avatarX, this.avatarY, this.avatarWidth, this.avatarHeight)
+        }
       }
     },
     makeBowl() {
@@ -163,8 +167,12 @@ export default {
           this.bowlX -= moveBowlSpeed
         }, 1000)
         this.startBtnY -= moveBowlSpeed
-        if (this.avatarY <= this.conBottom + this.canvas.width * 0.05) {
-          this.avatarY += moveBowlSpeed / 2
+        if (this.avatarY <= this.newAvatarY) {
+          this.avatarY += moveBowlSpeed
+        } else {
+          if (this.avatarX >= this.newAvatarX) {
+            this.avatarX += moveBowlSpeed
+          }
         }
         this.started = true
         this.ctx.drawImage(
