@@ -28,7 +28,8 @@ export default {
       avatar: null,
       avatarIndex: 0,
       newAvatarY: null,
-      newAvatarX: null
+      newAvatarX: null,
+      done: false
     }
   },
   mounted() {
@@ -41,12 +42,29 @@ export default {
     this.conBottom = this.conRect.bottom
     this.canvas.addEventListener('click', this.startButtonClick)
     this.canvas.addEventListener('click', this.avatarClick)
+    this.canvas.addEventListener('click', this.jump)
     this.makeBowl()
     this.makeStartButton()
     this.avatarList = ['/bun.png', '/cat.png', '/hippo.png']
     this.makeAvatar()
   },
   methods: {
+    jump() {
+      this.jumped = this.conBottom + this.canvas.width
+      if (this.done === true) {
+        if (this.avatarY >= this.conBottom - this.canvas.width) {
+          requestAnimationFrame(this.jump)
+          this.avatarY -= 10
+          this.ctx.drawImage(
+            this.avatar,
+            this.avatarX,
+            this.avatarY,
+            this.avatarWidth,
+            this.avatarHeight
+          )
+        }
+      }
+    },
     resizeplz() {
       this.canvas.width = window.innerWidth * 0.75
       this.canvas.height = this.canvas.width * 0.6
@@ -55,10 +73,10 @@ export default {
       this.bowlHeight = this.canvas.height * 0.75
       this.bowlX = this.canvas.width / 3
       this.newBowlX = this.bowlX / -0.7
-      this.startBtnWidth = this.canvas.width / 4
-      this.startBtnHeight = this.canvas.width / 9
-      this.startBtnX = this.canvas.width * 0.09
-      this.startBtnY = this.conBottom + this.canvas.width * 0.23
+      this.startBtnWidth = this.canvas.width / 2.45
+      this.startBtnHeight = this.canvas.width / 1.7
+      this.startBtnX = this.canvas.width * 0.001
+      this.startBtnY = 0
       if (this.started === true) {
         this.ctx.drawImage(
           this.bowl,
@@ -112,7 +130,7 @@ export default {
       this.startBtnWidth = this.canvas.width / 2.45
       this.startBtnHeight = this.canvas.width / 1.7
       this.startBtnX = this.canvas.width * 0.001
-      this.startBtnY = this.conBottom + this.canvas.width * 0.23
+      this.startBtnY = 0
     },
     startButtonClick(event) {
       const clickX = event.offsetX
@@ -165,14 +183,17 @@ export default {
         let moveBowlSpeed = this.canvas.width / 200
         setTimeout(() => {
           this.bowlX -= moveBowlSpeed
-        }, 1000)
-        this.startBtnY -= moveBowlSpeed
+        }, 600)
+        this.startBtnY -= moveBowlSpeed * 2
         if (this.avatarY <= this.newAvatarY) {
           this.avatarY += moveBowlSpeed
         } else {
           if (this.avatarX >= this.newAvatarX) {
-            this.avatarX += moveBowlSpeed
+            this.avatarX -= moveBowlSpeed
           }
+        }
+        if (this.avatarX <= this.newAvatarX) {
+          this.done = true
         }
         this.started = true
         this.ctx.drawImage(
