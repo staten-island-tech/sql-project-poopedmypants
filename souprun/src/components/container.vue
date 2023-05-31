@@ -1,10 +1,16 @@
+<script setup>
+import score from '../components/score.vue'
+import { watch} from 'vue';
+</script>
 <template>
   <div>
+    <score :started="started"/>
     <canvas id="con"></canvas>
   </div>
 </template>
 
 <script>
+import { triggerRef } from 'vue'
 export default {
   data() {
     //very sorry for all these variables .-.
@@ -29,7 +35,9 @@ export default {
       avatarIndex: 0,
       newAvatarY: null,
       newAvatarX: null,
-      done: false
+      done: false,
+      up: false,
+      obby: null,
     }
   },
   mounted() {
@@ -47,14 +55,88 @@ export default {
     this.makeStartButton()
     this.avatarList = ['/bun.png', '/cat.png', '/hippo.png']
     this.makeAvatar()
+    this.watch()
   },
   methods: {
-    jump() {
-      this.jumped = this.conBottom + this.canvas.width
+    moveObby(){
+      this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height)
+      this.ctx.drawImage(this.bowl, this.bowlX, this.conBottom, this.bowlWidth, this.bowlHeight)
+      this.ctx.drawImage(
+            this.avatar,
+            this.avatarX,
+            this.avatarY,
+            this.avatarWidth,
+            this.avatarHeight
+          )
+      this.obbyX -= 5
+      this.ctx.drawImage(
+          this.obby,
+          this.obbyX,
+          this.obbyY,
+          this.obbyWidth,
+          this.obbyHeight
+        )
+        requestAnimationFrame(this.moveObby)
+    },
+    randomGen(){
+      const min = 1000;
+      const max = 4000;
+      return Math.floor(Math.random() * (max - min + 1)) + min;
+    },
+    watch(){
+      watch(() => this.started, (newValue, oldValue) => {
+  console.log('started has changed:', newValue);
+  setTimeout(() => {
+  this.createObby()
+}, this.randomGen());
+});
+    },
+    createObby(){
+      this.obby = new Image()
+      this.obby.src = '/obby1.png'
+      this.obby.onload = () => {
+        this.ctx.drawImage(
+          this.obby,
+          this.obbyX,
+          this.obbyY,
+          this.obbyWidth,
+          this.obbyHeight
+        )
+      }
+      this.obbyWidth = this.canvas.width / 7
+      this.obbyHeight = this.canvas.height / 8
+      this.obbyX = this.canvas.width /1.1
+      this.obbyY = this.conBottom *1.9
+      this.moveObby()
+      setTimeout(() => {
+        requestAnimationFrame(this.createObby)
+    }, this.randomGen());
+    },
+    jump(){
+      if(this.started === true){
+        if(this.done === true){
+        this.jumpP()
+      } else{
+        this.done = true
+      }
+      }
+
+    },
+    jumpP() {
       if (this.done === true) {
-        if (this.avatarY >= this.conBottom - this.canvas.width) {
-          requestAnimationFrame(this.jump)
-          this.avatarY -= 10
+        requestAnimationFrame(this.jump)
+        this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height)
+        this.ctx.drawImage(this.bowl, this.bowlX, this.conBottom, this.bowlWidth, this.bowlHeight)
+        this.ctx.drawImage(
+          this.obby,
+          this.obbyX,
+          this.obbyY,
+          this.obbyWidth,
+          this.obbyHeight
+        )
+        if(this.up === true){
+          if (this.avatarY <= this.conBottom + this.canvas.width * 0.05) {
+          this.avatarY += this.canvas.width /300
           this.ctx.drawImage(
             this.avatar,
             this.avatarX,
@@ -62,6 +144,24 @@ export default {
             this.avatarWidth,
             this.avatarHeight
           )
+        } else{
+          this.up = false
+          this.done = false
+        }
+        }
+        if(this.up === false){
+          if (this.avatarY >= this.conBottom/5  ) {
+          this.avatarY -= this.canvas.width /300
+          this.ctx.drawImage(
+            this.avatar,
+            this.avatarX,
+            this.avatarY,
+            this.avatarWidth,
+            this.avatarHeight
+          )
+        } else{
+          this.up = true 
+        }
         }
       }
     },
@@ -181,9 +281,7 @@ export default {
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height)
         this.ctx.drawImage(this.bowl, this.bowlX, this.conBottom, this.bowlWidth, this.bowlHeight)
         let moveBowlSpeed = this.canvas.width / 200
-        setTimeout(() => {
           this.bowlX -= moveBowlSpeed
-        }, 600)
         this.startBtnY -= moveBowlSpeed * 2
         if (this.avatarY <= this.newAvatarY) {
           this.avatarY += moveBowlSpeed
