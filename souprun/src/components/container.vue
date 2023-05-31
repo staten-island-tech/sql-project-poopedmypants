@@ -38,6 +38,7 @@ export default {
       done: false,
       up: false,
       obby: null,
+      speed: null,
     }
   },
   mounted() {
@@ -56,6 +57,7 @@ export default {
     this.avatarList = ['/bun.png', '/cat.png', '/hippo.png']
     this.makeAvatar()
     this.watch()
+    this.speed = 5
   },
   methods: {
     moveObby(){
@@ -68,7 +70,8 @@ export default {
             this.avatarWidth,
             this.avatarHeight
           )
-      this.obbyX -= 5
+      this.obbyX -= this.speed
+      //redraws the obdticle
       this.ctx.drawImage(
           this.obby,
           this.obbyX,
@@ -105,8 +108,8 @@ export default {
       }
       this.obbyWidth = this.canvas.width / 7
       this.obbyHeight = this.canvas.height / 8
-      this.obbyX = this.canvas.width /1.1
       this.obbyY = this.conBottom *1.9
+      this.obbyX = this.canvas.width /1.1
       this.moveObby()
       setTimeout(() => {
         requestAnimationFrame(this.createObby)
@@ -136,7 +139,7 @@ export default {
         )
         if(this.up === true){
           if (this.avatarY <= this.conBottom + this.canvas.width * 0.05) {
-          this.avatarY += this.canvas.width /300
+          this.avatarY += this.canvas.width /100
           this.ctx.drawImage(
             this.avatar,
             this.avatarX,
@@ -151,7 +154,7 @@ export default {
         }
         if(this.up === false){
           if (this.avatarY >= this.conBottom/5  ) {
-          this.avatarY -= this.canvas.width /300
+          this.avatarY -= this.canvas.width /100
           this.ctx.drawImage(
             this.avatar,
             this.avatarX,
