@@ -1,6 +1,5 @@
 <script setup>
 import score from '../components/score.vue'
-import { watch} from 'vue';
 </script>
 <template>
   <div>
@@ -10,7 +9,6 @@ import { watch} from 'vue';
 </template>
 
 <script>
-import { triggerRef } from 'vue'
 export default {
   data() {
     //very sorry for all these variables .-.
@@ -37,8 +35,10 @@ export default {
       newAvatarX: null,
       done: false,
       up: false,
-      obby: null,
-      speed: null,
+      obbies: [],
+      obbyImage: null,
+      minSpawnTime: 1000,
+      maxSpawnTime: 4000,
     }
   },
   mounted() {
@@ -56,65 +56,57 @@ export default {
     this.makeStartButton()
     this.avatarList = ['/bun.png', '/cat.png', '/hippo.png']
     this.makeAvatar()
-    this.watch()
     this.speed = 5
+    this.obbyImage = new Image()
+      this.obbyImage.src = '/obby1.png'
+  },
+  
+  watch: {
+    started(newVal) {
+      if (newVal) {
+        setTimeout(() => {
+          this.spawnObstacle();
+}, 2000);
+      }
+    },
   },
   methods: {
-    moveObby(){
-      this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height)
-      this.ctx.drawImage(this.bowl, this.bowlX, this.conBottom, this.bowlWidth, this.bowlHeight)
-      this.ctx.drawImage(
-            this.avatar,
-            this.avatarX,
-            this.avatarY,
-            this.avatarWidth,
-            this.avatarHeight
-          )
-      this.obbyX -= this.speed
-      //redraws the obdticle
-      this.ctx.drawImage(
-          this.obby,
-          this.obbyX,
-          this.obbyY,
-          this.obbyWidth,
-          this.obbyHeight
-        )
-        requestAnimationFrame(this.moveObby)
-    },
-    randomGen(){
-      const min = 1000;
-      const max = 4000;
-      return Math.floor(Math.random() * (max - min + 1)) + min;
-    },
-    watch(){
-      watch(() => this.started, (newValue, oldValue) => {
-  console.log('started has changed:', newValue);
-  setTimeout(() => {
-  this.createObby()
-}, this.randomGen());
-});
-    },
-    createObby(){
-      this.obby = new Image()
-      this.obby.src = '/obby1.png'
-      this.obby.onload = () => {
-        this.ctx.drawImage(
-          this.obby,
-          this.obbyX,
-          this.obbyY,
-          this.obbyWidth,
-          this.obbyHeight
-        )
+    spawnObstacle() {
+      if (this.started) {
+        console.log("running")
+        const obstacle = {
+    x: this.canvas.width / 1.1,
+    y: this.conBottom * 1.9,
+    height: this.canvas.height / 8,
+    width: this.canvas.width / 7,
+    speed: this.speed,
+  };
+  this.obbies.push(obstacle);
+        const spawnTime = Math.floor(
+          Math.random() * (this.maxSpawnTime - this.minSpawnTime + 1) + this.minSpawnTime
+        );
+        setTimeout(this.spawnObstacle, spawnTime);
+        this.moveObstacles();
       }
-      this.obbyWidth = this.canvas.width / 7
-      this.obbyHeight = this.canvas.height / 8
-      this.obbyY = this.conBottom *1.9
-      this.obbyX = this.canvas.width /1.1
-      this.moveObby()
-      setTimeout(() => {
-        requestAnimationFrame(this.createObby)
-    }, this.randomGen());
     },
+    moveObstacles() {
+      if (this.started) {
+        console.log("okewfw")
+        this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+        this.ctx.drawImage(this.bowl, this.bowlX, this.conBottom, this.bowlWidth, this.bowlHeight);
+      this.ctx.drawImage(this.avatar, this.avatarX, this.avatarY, this.avatarWidth, this.avatarHeight);
+        for (let i = 0; i < this.obbies.length; i++) {
+          let el = this.obbies[i];
+          el.x -= 5;
+          this.ctx.drawImage(this.obbyImage, el.x, el.y, el.width, el.height);
+          if (el.x + el.width < 0) {
+            this.obbies.splice(i, 1);
+            i--;
+          }
+        }
+        requestAnimationFrame(this.moveObstacles);
+      }
+  },
     jump(){
       if(this.started === true){
         if(this.done === true){
@@ -130,13 +122,6 @@ export default {
         requestAnimationFrame(this.jump)
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height)
         this.ctx.drawImage(this.bowl, this.bowlX, this.conBottom, this.bowlWidth, this.bowlHeight)
-        this.ctx.drawImage(
-          this.obby,
-          this.obbyX,
-          this.obbyY,
-          this.obbyWidth,
-          this.obbyHeight
-        )
         if(this.up === true){
           if (this.avatarY <= this.conBottom + this.canvas.width * 0.05) {
           this.avatarY += this.canvas.width /100
@@ -313,7 +298,7 @@ export default {
         )
       }
     }
-  }
+  },
 }
 </script>
 
