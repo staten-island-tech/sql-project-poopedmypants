@@ -4,7 +4,7 @@
 <template>
   <div>
     <!-- <score :started="started"/> -->
-    <p>{{ this.score }}</p>
+    <p>SCORE: {{ this.score }}</p>
     <canvas id="con"></canvas>
   </div>
 </template>
@@ -45,6 +45,15 @@ export default {
       wait: false,
       a: 0,
       score: 0,
+      catx: 0,
+      caty: 0,
+      cath: 0,
+      catw: 0,
+      i: 0,
+      testerx:0,
+      hippox:0,
+      bunx: 0,
+      gameOver:false,
     }
   },
   mounted() {
@@ -55,32 +64,164 @@ export default {
     this.ctx = this.canvas.getContext('2d')
     this.conRect = this.canvas.getBoundingClientRect()
     this.conBottom = this.conRect.bottom
-    this.canvas.addEventListener('click', this.startButtonClick)
-    this.canvas.addEventListener('click', this.avatarClick)
-    this.canvas.addEventListener('click', this.jump)
+    this.canvas.addEventListener('click', this.clicked)
     this.makeBowl()
-    this.makeStartButton()
-    this.avatarList = ['/bun.png', '/cat.png', '/hippo.png']
+    this.makeLeaderBoard()
+    this.avatarList = ['/bun.png', '/cat.png', '/hippo.png', '/bundied.png', '/hippodead.png']
     this.makeAvatar()
     this.obbyImage = new Image()
     this.obbyImage.src = '/obby1.png'
     this.speed =this.canvas.width /100
+    this.cath =this.canvas.width / 20
+      this.catw =this.canvas.width / 20
+      this.catx = this.canvas.width /12
+      this.caty = this.canvas.width / 1.95
+      this.hippox = this.canvas.width /5.3
+      this.bunx = this.canvas.width /3.5
   },
   
   watch: {
     started(newVal) {
       if (newVal) {
         setTimeout(() => {
+          this.canvas.addEventListener('click', this.jump)
+}, 1000);
+        setTimeout(() => {
           this.spawnObstacle();
           this.startTimer();
 }, 2000);
       }
     },
+    gameOver(newVal){
+      if (newVal === true){
+        if(this.gameOver ===true){
+          console.log("fewknjf")
+        if(this.i === 0){
+          this.i= 3
+        }
+        if(this.i === 2){
+          this.i = 4
+        }
+        this.avatar.src = this.avatarList[this.i]
+          this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+          this.ctx.drawImage(this.bowl, this.bowlX, this.conBottom, this.bowlWidth, this.bowlHeight);
+          this.ctx.drawImage(this.obbyImage, this.x, this.y, this.width, this.height);
+          this.ctx.drawImage(
+          this.avatar,
+          this.avatarX,
+          this.avatarY,
+          this.avatarWidth,
+          this.avatarHeight
+        )
+        }
+      }
+    }
   },
   methods: {
+    clicked(){
+      const clickX = event.offsetX
+      const clickY = event.offsetY
+      if (
+        clickX >= this.avatarX &&
+        clickX <= this.avatarX + this.avatarWidth &&
+        clickY >= this.avatarY &&
+        clickY <= this.avatarY + this.avatarHeight
+      ) {
+        if (this.started === false) {
+          this.moveBowl()
+        }
+      }
+      if (
+        clickX >= this.catx &&
+        clickX <= this.catx + this.catw &&
+        clickY >= this.caty &&
+        clickY <= this.caty + this.cath
+      ) {
+        if (this.started === false) {
+          console.log("ok")
+          this.i = 1
+          this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+        this.ctx.drawImage(this.bowl, this.bowlX, this.conBottom, this.bowlWidth, this.bowlHeight);
+        this.ctx.drawImage(
+          this.startBtn,
+          this.startBtnX,
+          0,
+          this.startBtnWidth,
+          this.startBtnHeight
+        )
+          this.makeAvatar()
+        }
+      }
+      if (
+        clickX >= this.hippox &&
+        clickX <= this.hippox + this.catw &&
+        clickY >= this.caty &&
+        clickY <= this.caty + this.cath
+      ) {
+        if (this.started === false) {
+          console.log("hippo")
+          this.i = 2
+          this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+        this.ctx.drawImage(this.bowl, this.bowlX, this.conBottom, this.bowlWidth, this.bowlHeight);
+        this.ctx.drawImage(
+          this.startBtn,
+          this.startBtnX,
+          0,
+          this.startBtnWidth,
+          this.startBtnHeight
+        )
+          this.makeAvatar()
+        }
+      }
+      if (
+        clickX >= this.bunx &&
+        clickX <= this.bunx + this.catw &&
+        clickY >= this.caty &&
+        clickY <= this.caty + this.cath
+      ) {
+        if (this.started === false) {
+          console.log("hippo")
+          this.i = 0
+          this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+        this.ctx.drawImage(this.bowl, this.bowlX, this.conBottom, this.bowlWidth, this.bowlHeight);
+        this.ctx.drawImage(
+          this.startBtn,
+          this.startBtnX,
+          0,
+          this.startBtnWidth,
+          this.startBtnHeight
+        )
+          this.makeAvatar()
+        }
+      }
+    },
+    o(){
+      if(this.started === false){
+        this.cath =this.canvas.width / 20
+      this.catw =this.canvas.width / 20
+      this.testerx = this.canvas.width /3.5
+      this.caty = this.canvas.width / 1.95
+      this.ctx.fillRect(this.testerx, this.caty, this.catw, this.cath)
+      this.ctx.fillStyle = 'rgba(225,225,225,0.5)';
+      requestAnimationFrame(this.o);
+      }
+    },
+    collisionDetection() {
+      if (
+        this.avatarX < this.x + this.width &&
+        this.avatarX + this.avatarWidth > this.x &&
+        this.avatarY < this.y + this.height &&
+        this.avatarY + this.avatarHeight > this.y
+      ) {
+        this.started = false;
+        this.gameOver = true;
+      }
+    },
     startTimer() {
       setInterval(() => {
-        this.score += 1;
+        if(this.started === true){
+          this.score += 1;
+        }
       }, 50);
     },
     velocity(){
@@ -93,11 +234,11 @@ export default {
     },
     spawnObstacle() {
       this.wait = false
-      if (this.started) {
-        this.x= this.canvas.width / 1.1,
+      this.x= this.canvas.width / 1.1,
     this.y= this.conBottom * 2,
     this.height= this.canvas.height / 10,
-    this.width= this.canvas.width / 9,
+    this.width= this.canvas.width / 9
+      if (this.started) {
         this.ctx.drawImage(this.obbyImage, this.x, this.y, this.width, this.height);
         this.moveObstacles();
       }
@@ -126,6 +267,7 @@ export default {
           requestAnimationFrame(this.moveObstacles);
     }, delay);
       }
+      this.collisionDetection()
       }
   },
     jump(){
@@ -160,7 +302,7 @@ export default {
         }
         }
         if(this.up === false){
-          if (this.avatarY >= this.conBottom/9  ) {
+          if (this.avatarY >= this.conBottom/-4  ) {
           this.avatarY -= this.canvas.width /150
           this.ctx.drawImage(
             this.avatar,
@@ -179,7 +321,8 @@ export default {
     resizeplz() {
       this.canvas.width = window.innerWidth * 0.75
       this.canvas.height = this.canvas.width * 0.6
-      this.conBottom = this.canvas.height - this.bowlHeight
+  
+        this.conBottom =this.canvas.width /7
       this.bowlWidth = this.canvas.width + this.canvas.width / 2
       this.bowlHeight = this.canvas.height * 0.75
       this.bowlX = this.canvas.width / 3
@@ -188,17 +331,12 @@ export default {
       this.startBtnHeight = this.canvas.width / 1.7
       this.startBtnX = this.canvas.width * 0.001
       this.startBtnY = 0
+      this.avatarWidth = this.canvas.width / 5
+      this.avatarHeight = this.canvas.height / 4
+      this.avatarX = this.canvas.width / 1.5
+      this.avatarY = this.conBottom - this.canvas.width * 0.1
+      this.newAvatarY = this.conBottom + this.canvas.width * 0.05
       this.ctx.drawImage(this.avatar, this.avatarX, this.avatarY, this.avatarWidth, this.avatarHeight);
-      if (this.started === true) {
-        this.ctx.drawImage(
-          this.bowl,
-          this.newBowlX,
-          this.conBottom,
-          this.bowlWidth,
-          this.bowlHeight
-        )
-        
-      } else {
         this.ctx.drawImage(this.bowl, this.bowlX, this.conBottom, this.bowlWidth, this.bowlHeight)
         this.ctx.drawImage(
           this.startBtn,
@@ -207,11 +345,12 @@ export default {
           this.startBtnWidth,
           this.startBtnHeight
         )
-      }
+        this.started = false
+      this.score = 0
     },
     makeAvatar() {
       this.avatar = new Image()
-      this.avatar.src = this.avatarList[this.avatarIndex]
+      this.avatar.src = this.avatarList[this.i]
       this.avatar.onload = () => {
         this.ctx.drawImage(
           this.avatar,
@@ -228,7 +367,7 @@ export default {
       this.newAvatarY = this.conBottom + this.canvas.width * 0.05
       this.newAvatarX = this.canvas.width / 8
     },
-    makeStartButton() {
+    makeLeaderBoard() {
       this.startBtn = new Image()
       this.startBtn.src = '/sign.png' //placeholderrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr ahhhh
       this.startBtn.onload = () => {
@@ -245,34 +384,20 @@ export default {
       this.startBtnX = this.canvas.width * 0.001
       this.startBtnY = 0
     },
-    startButtonClick(event) {
-      const clickX = event.offsetX
-      const clickY = event.offsetY
-      if (
-        clickX >= this.startBtnX &&
-        clickX <= this.startBtnX + this.startBtnWidth &&
-        clickY >= this.startBtnY &&
-        clickY <= this.startBtnY + this.startBtnHeight
-      ) {
-        this.moveBowl() // Execute moveBowl function
-      }
-    },
-    avatarClick(event) {
-      const clickX = event.offsetX
-      const clickY = event.offsetY
-      if (
-        clickX >= this.avatarX &&
-        clickX <= this.avatarX + this.avatarWidth &&
-        clickY >= this.avatarY &&
-        clickY <= this.avatarY + this.avatarHeight
-      ) {
-        if (this.started === false) {
-          this.avatarIndex += 1
-          this.avatar.src = this.avatarList[this.avatarIndex % this.avatarList.length]
-          this.ctx.clearRect(this.avatarX, this.avatarY, this.avatarWidth, this.avatarHeight)
-        }
-      }
-    },
+    // avatarClick(event) {
+    //   const clickX = event.offsetX
+    //   const clickY = event.offsetY
+    //   if (
+    //     clickX >= this.avatarX &&
+    //     clickX <= this.avatarX + this.avatarWidth &&
+    //     clickY >= this.avatarY &&
+    //     clickY <= this.avatarY + this.avatarHeight
+    //   ) {
+    //     if (this.started === false) {
+    //       this.moveBowl()
+    //     }
+    //   }
+    // },
     makeBowl() {
       this.bowl = new Image()
       this.bowl.src = '/bowl.png'
@@ -285,7 +410,7 @@ export default {
       this.bowlWidth = this.canvas.width + this.canvas.width / 2
       this.bowlHeight = this.canvas.height * 0.75
       this.bowlX = this.canvas.width / 3
-      this.conBottom = this.canvas.height - this.bowlHeight
+      this.conBottom = this.canvas.width /7
       this.newBowlX = this.bowlX / -0.7
     },
     moveBowl() {
