@@ -1,9 +1,10 @@
 <script setup>
-import score from '../components/score.vue'
+// import score from '../components/score.vue'
 </script>
 <template>
   <div>
-    <score :started="started"/>
+    <!-- <score :started="started"/> -->
+    <p>{{ this.score }}</p>
     <canvas id="con"></canvas>
   </div>
 </template>
@@ -35,10 +36,15 @@ export default {
       newAvatarX: null,
       done: false,
       up: false,
-      obbies: [],
       obbyImage: null,
-      minSpawnTime: 1000,
-      maxSpawnTime: 4000,
+      x: 0,
+      y:0,
+      height:0,
+      width:0,
+      speed:0,
+      wait: false,
+      a: 0,
+      score: 0,
     }
   },
   mounted() {
@@ -56,9 +62,9 @@ export default {
     this.makeStartButton()
     this.avatarList = ['/bun.png', '/cat.png', '/hippo.png']
     this.makeAvatar()
-    this.speed = 5
     this.obbyImage = new Image()
-      this.obbyImage.src = '/obby1.png'
+    this.obbyImage.src = '/obby1.png'
+    this.speed =this.canvas.width /100
   },
   
   watch: {
@@ -66,45 +72,60 @@ export default {
       if (newVal) {
         setTimeout(() => {
           this.spawnObstacle();
+          this.startTimer();
 }, 2000);
       }
     },
   },
   methods: {
+    startTimer() {
+      setInterval(() => {
+        this.score += 1;
+      }, 50);
+    },
+    velocity(){
+      if(this.score< 1500){
+        this.a = Math.floor(this.score/50) *2
+      console.log(this.a)
+      this.speed = this.canvas.width /(100 -this.a)
+      console.log(this.speed)
+      }
+    },
     spawnObstacle() {
+      this.wait = false
       if (this.started) {
-        console.log("running")
-        const obstacle = {
-    x: this.canvas.width / 1.1,
-    y: this.conBottom * 1.9,
-    height: this.canvas.height / 8,
-    width: this.canvas.width / 7,
-    speed: this.speed,
-  };
-  this.obbies.push(obstacle);
-        const spawnTime = Math.floor(
-          Math.random() * (this.maxSpawnTime - this.minSpawnTime + 1) + this.minSpawnTime
-        );
-        setTimeout(this.spawnObstacle, spawnTime);
+        this.x= this.canvas.width / 1.1,
+    this.y= this.conBottom * 2,
+    this.height= this.canvas.height / 10,
+    this.width= this.canvas.width / 9,
+        this.ctx.drawImage(this.obbyImage, this.x, this.y, this.width, this.height);
         this.moveObstacles();
       }
     },
     moveObstacles() {
+      const delay = Math.floor(Math.random() * 0) + 1000;
       if (this.started) {
-        console.log("okewfw")
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
         this.ctx.drawImage(this.bowl, this.bowlX, this.conBottom, this.bowlWidth, this.bowlHeight);
       this.ctx.drawImage(this.avatar, this.avatarX, this.avatarY, this.avatarWidth, this.avatarHeight);
-        for (let i = 0; i < this.obbies.length; i++) {
-          let el = this.obbies[i];
-          el.x -= 5;
-          this.ctx.drawImage(this.obbyImage, el.x, el.y, el.width, el.height);
-          if (el.x + el.width < 0) {
-            this.obbies.splice(i, 1);
-            i--;
-          }
-        }
+      if(this.x >= this.canvas.width / -9){
+        this.x -= this.speed
+      this.ctx.drawImage(this.obbyImage, this.x, this.y, this.width, this.height);
+      }else{
+        this.wait = true
+        setTimeout(() => {
+          this.velocity();
+          this.x = this.canvas.width / 1.1
+          this.wait = false
+    }, delay);
+      }
+      if(this.wait === false){
         requestAnimationFrame(this.moveObstacles);
+      }else{
+        setTimeout(() => {
+          requestAnimationFrame(this.moveObstacles);
+    }, delay);
+      }
       }
   },
     jump(){
@@ -121,10 +142,11 @@ export default {
       if (this.done === true) {
         requestAnimationFrame(this.jump)
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height)
+      
         this.ctx.drawImage(this.bowl, this.bowlX, this.conBottom, this.bowlWidth, this.bowlHeight)
         if(this.up === true){
           if (this.avatarY <= this.conBottom + this.canvas.width * 0.05) {
-          this.avatarY += this.canvas.width /100
+          this.avatarY += this.canvas.width /150
           this.ctx.drawImage(
             this.avatar,
             this.avatarX,
@@ -138,8 +160,8 @@ export default {
         }
         }
         if(this.up === false){
-          if (this.avatarY >= this.conBottom/5  ) {
-          this.avatarY -= this.canvas.width /100
+          if (this.avatarY >= this.conBottom/9  ) {
+          this.avatarY -= this.canvas.width /150
           this.ctx.drawImage(
             this.avatar,
             this.avatarX,
@@ -152,6 +174,7 @@ export default {
         }
         }
       }
+      this.ctx.drawImage(this.obbyImage, this.x, this.y, this.width, this.height);
     },
     resizeplz() {
       this.canvas.width = window.innerWidth * 0.75
@@ -165,6 +188,7 @@ export default {
       this.startBtnHeight = this.canvas.width / 1.7
       this.startBtnX = this.canvas.width * 0.001
       this.startBtnY = 0
+      this.ctx.drawImage(this.avatar, this.avatarX, this.avatarY, this.avatarWidth, this.avatarHeight);
       if (this.started === true) {
         this.ctx.drawImage(
           this.bowl,
@@ -173,6 +197,7 @@ export default {
           this.bowlWidth,
           this.bowlHeight
         )
+        
       } else {
         this.ctx.drawImage(this.bowl, this.bowlX, this.conBottom, this.bowlWidth, this.bowlHeight)
         this.ctx.drawImage(
