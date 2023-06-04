@@ -1,6 +1,6 @@
 <script setup>
 import container from '../components/container.vue'
-import login from '../components/login.vue'
+import login from '../components/loginPage.vue'
 </script>
 
 <template>
