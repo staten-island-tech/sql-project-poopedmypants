@@ -1,7 +1,23 @@
 @import './base.css';
 @import url('https://fonts.googleapis.com/css2?family=Bubblegum+Sans&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Bubblegum+Sans&family=Cute+Font&display=swap');
 body{
+    color: rgba(104,22,22,255);
+    font-family: 'Bubblegum Sans', cursive;
+font-family: 'Cute Font', cursive;
     overflow: hidden;
     background-color: rgb(243, 231, 210);
     margin: 0;
+    ::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
+        color: rgba(104,22,22,255);
+        opacity: .5; /* Firefox */
+      }
+      
+      :-ms-input-placeholder { /* Internet Explorer 10-11 */
+        color: rgba(104,22,22,255, .5);
+      }
+      
+      ::-ms-input-placeholder { /* Microsoft Edge */
+        color: rgba(104,22,22,255, .5);
+      }
 }

@@ -4,7 +4,7 @@
 <template>
   <div>
     <!-- <score :started="started"/> -->
-    <p>SCORE: {{ this.score }}</p>
+    <p id="score">SCORE: {{ this.score }}</p>
     <canvas id="con"></canvas>
   </div>
 </template>
@@ -63,7 +63,6 @@ export default {
     window.addEventListener('resize', this.resizeplz)
     this.ctx = this.canvas.getContext('2d')
     this.conRect = this.canvas.getBoundingClientRect()
-    this.conBottom = this.conRect.bottom
     this.canvas.addEventListener('click', this.clicked)
     this.makeBowl()
     this.makeLeaderBoard()
@@ -84,6 +83,7 @@ export default {
     started(newVal) {
       if (newVal) {
         setTimeout(() => {
+          window.addEventListener('keydown', this.spacebar);
           this.canvas.addEventListener('click', this.jump)
 }, 1000);
         setTimeout(() => {
@@ -118,6 +118,12 @@ export default {
     }
   },
   methods: {
+    spacebar(event) {
+      if (event.code === 'Space') {
+        // Call your function here
+        this.jump();
+      }
+    },
     clicked(){
       const clickX = event.offsetX
       const clickY = event.offsetY
@@ -322,7 +328,7 @@ export default {
       this.canvas.width = window.innerWidth * 0.75
       this.canvas.height = this.canvas.width * 0.6
   
-        this.conBottom =this.canvas.width /7
+        this.conBottom =this.canvas.width /6.5
       this.bowlWidth = this.canvas.width + this.canvas.width / 2
       this.bowlHeight = this.canvas.height * 0.75
       this.bowlX = this.canvas.width / 3
@@ -410,7 +416,7 @@ export default {
       this.bowlWidth = this.canvas.width + this.canvas.width / 2
       this.bowlHeight = this.canvas.height * 0.75
       this.bowlX = this.canvas.width / 3
-      this.conBottom = this.canvas.width /7
+      this.conBottom = this.canvas.width /6.5
       this.newBowlX = this.bowlX / -0.7
     },
     moveBowl() {
@@ -459,5 +465,16 @@ export default {
   left: 50%;
   transform: translate(-50%, -50%);
   top: 50%;
+}
+#score{
+margin: 0;
+  z-index: 99;
+  position: absolute;
+  top: 0vw;
+  left: 50%;
+  transform: translate(-50%, 0%);
+  color: rgba(104,22,22,255);
+  font-size: 2vw;
+  font-weight: bold;
 }
 </style>
