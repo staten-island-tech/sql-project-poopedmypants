@@ -4,6 +4,7 @@ import login from '../components/loginPage.vue'
 
 <template>
 <divs>
+  <h1>login</h1>
     <login/>
 </divs>
 </template>
