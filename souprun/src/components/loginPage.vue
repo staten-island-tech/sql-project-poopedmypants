@@ -1,19 +1,15 @@
 <template>
    <div id="container">
     <form @submit.prevent="login">
-      <!-- //ness: used to listen forform submission 
-      //calls login method and prevent default sub -->
       <input v-model="username" type="text" placeholder="Username" />
       <input v-model="password" type="password" placeholder="Password" />
-      <button type="submit" class="logsign" id="login">LOGIN</button>
-      <button type="button" class="logsign" id="signup" @click="navigateToSignUp">SIGN UP</button>
+      <router-link :to="{ path: '/' }"><button class="logsign" id="sign-up">LOGIN</button></router-link>
+      <router-link :to="{ path: '/' }"><button class="logsign" id="log-in">SIGN UP</button></router-link>
     </form>
   </div>
-      <!-- ness: why was router-link here mamas i removed it -->
 </template>
 
 <script>
-import { createClient } from '@supabase/supabase-js'
 //ness: logic for login 
 export default {
   data() {
@@ -41,13 +37,9 @@ export default {
       }
     },
   },
-
-  created() {
-    const supabase = createClient('YOUR_SUPABASE_URL', 'YOUR_SUPABASE_KEY')
-    this.$supabase = supabase
-  },
 }
 </script>
+
 <style>
 #container{
   position: absolute;
