@@ -1,8 +1,6 @@
 <template>
    <div id="container">
     <form @submit.prevent="login">
-      //ness: used to listen forform submission 
-      //calls login method and prevent default sub
       <input v-model="username" type="text" placeholder="Username" />
       <input v-model="password" type="password" placeholder="Password" />
       <router-link :to="{ path: '/' }"><button class="logsign" id="sign-up">LOGIN</button></router-link>
@@ -41,6 +39,7 @@ export default {
   },
 }
 </script>
+
 <style>
 #container{
   position: absolute;
