@@ -1,15 +1,15 @@
 <template>
    <div id="container">
     <form @submit.prevent="login">
-      //ness: used to listen forform submission 
-      //calls login method and prevent default sub
+      <!-- //ness: used to listen forform submission 
+      //calls login method and prevent default sub -->
       <input v-model="username" type="text" placeholder="Username" />
       <input v-model="password" type="password" placeholder="Password" />
       <button type="submit" class="logsign" id="login">LOGIN</button>
       <button type="button" class="logsign" id="signup" @click="navigateToSignUp">SIGN UP</button>
     </form>
   </div>
-      //ness: why was router-link here mamas i removed it
+      <!-- ness: why was router-link here mamas i removed it -->
 </template>
 
 <script>

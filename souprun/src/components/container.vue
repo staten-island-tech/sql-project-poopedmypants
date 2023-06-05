@@ -54,6 +54,20 @@ export default {
       hippox:0,
       bunx: 0,
       gameOver:false,
+      gos: null,
+      gosX: 0,
+      gosY: 0,
+      gosWidth: 0,
+      gosHeight: 0,
+      goscoreX:0,
+      goscoreY:0,
+      gohscoreY:0,
+      gohscoreX:0,
+      gosup: false,
+      rbtnX: 0,
+      rbtnY: 0,
+      rbtnWidth: 0,
+      rbtnHeight: 0,
     }
   },
   mounted() {
@@ -72,11 +86,16 @@ export default {
     this.obbyImage.src = '/obby1.png'
     this.speed =this.canvas.width /100
     this.cath =this.canvas.width / 20
-      this.catw =this.canvas.width / 20
-      this.catx = this.canvas.width /12
-      this.caty = this.canvas.width / 1.95
-      this.hippox = this.canvas.width /5.3
-      this.bunx = this.canvas.width /3.5
+    this.catw =this.canvas.width / 20
+    this.catx = this.canvas.width /12
+    this.caty = this.canvas.width / 1.95
+    this.hippox = this.canvas.width /5.3
+    this.bunx = this.canvas.width /3.5
+    this.rbtnWidth = this.canvas.width / 4
+    this.rbtnHeight = this.canvas.height / 10
+    this.rbtnX = this.canvas.width / 1.62
+    this.rbtnY = this.conBottom *2.15
+
   },
   
   watch: {
@@ -118,6 +137,25 @@ export default {
     }
   },
   methods: {
+    goScreen(){
+      this.gos = new Image()
+      this.gos.src = '/gameover.png'
+      this.gos.onload = () => {
+        this.ctx.drawImage(
+          this.gos,
+          this.gosX,
+          this.gosY,
+          this.gosWidth,
+          this.gosHeight
+        )
+      }
+      this.gosWidth = this.canvas.width / 3
+      this.gosHeight = this.canvas.height / 2
+      this.gosX = this.canvas.width / 1.75
+      this.gosY = this.conBottom - this.canvas.width * 0.01
+      this.o();
+      this.p();
+    },
     spacebar(event) {
       if (event.code === 'Space') {
         // Call your function here
@@ -125,8 +163,24 @@ export default {
       }
     },
     clicked(){
+      this.rbtnWidth = this.canvas.width / 4
+    this.rbtnHeight = this.canvas.height / 10
+    this.rbtnX = this.canvas.width / 1.62
+    this.rbtnY = this.conBottom *2.15
       const clickX = event.offsetX
       const clickY = event.offsetY
+      if (
+        clickX >= this.rbtnX &&
+        clickX <= this.rbtnX + this.rbtnWidth &&
+        clickY >= this.rbtnY &&
+        clickY <= this.rbtnY + this.rbtnHeight
+      ) {
+        if (this.started === false) {
+            this.resizeplz();
+            this.gosup = false
+          
+        }
+      }
       if (
         clickX >= this.avatarX &&
         clickX <= this.avatarX + this.avatarWidth &&
@@ -203,13 +257,29 @@ export default {
     },
     o(){
       if(this.started === false){
-        this.cath =this.canvas.width / 20
-      this.catw =this.canvas.width / 20
-      this.testerx = this.canvas.width /3.5
-      this.caty = this.canvas.width / 1.95
-      this.ctx.fillRect(this.testerx, this.caty, this.catw, this.cath)
-      this.ctx.fillStyle = 'rgba(225,225,225,0.5)';
+        if(this.gosup === true){
+          this.fs = this.canvas.width / 35 +'px Cute Font, cursive'
+        this.ctx.font = this.fs;
+  this.ctx.fillText(this.score, this.goscoreX, this.goscoreY);
+  this.goscoreX = this.canvas.width / 1.47
+      this.goscoreY = this.conBottom *1.64
+      this.ctx.fillStyle = 'rgba(104,22,22,255)'
       requestAnimationFrame(this.o);
+        }
+      }
+    },
+    p(){
+      if(this.started === false){
+        if(this.gosup === true){
+          this.fs = this.canvas.width / 35 +'px Cute Font, cursive'
+        this.ctx.font = this.fs;
+  this.ctx.fillText('placeholder for highscore', this.gohscoreX, this.gohscoreY);
+  this.gohscoreX = this.canvas.width / 1.4
+      this.gohscoreY = this.conBottom *1.88
+      this.ctx.fillStyle = 'rgba(104,22,22,255)'
+      this.ctx.textAlign = 'left'
+      requestAnimationFrame(this.p);
+        }
       }
     },
     collisionDetection() {
@@ -219,8 +289,10 @@ export default {
         this.avatarY < this.y + this.height &&
         this.avatarY + this.avatarHeight > this.y
       ) {
-        this.started = false;
         this.gameOver = true;
+        this.gosup = true;
+        this.started = false;
+        this.goScreen()
       }
     },
     startTimer() {
@@ -231,7 +303,7 @@ export default {
       }, 50);
     },
     velocity(){
-      if(this.score< 1500){
+      if(this.score< 2300){
         this.a = Math.floor(this.score/50) *2
       console.log(this.a)
       this.speed = this.canvas.width /(100 -this.a)
@@ -325,13 +397,23 @@ export default {
       this.ctx.drawImage(this.obbyImage, this.x, this.y, this.width, this.height);
     },
     resizeplz() {
+      window.removeEventListener('keydown', this.spacebar);
+      this.canvas.removeEventListener('click', this.jump)
+      if(this.i === 3){
+        this.i = 0
+      }
+      if(this.i === 4){
+        this.i = 2
+      }
+      this.avatar.src = this.avatarList[this.i]
+      this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
       this.canvas.width = window.innerWidth * 0.75
       this.canvas.height = this.canvas.width * 0.6
-  
-        this.conBottom =this.canvas.width /6.5
+      this.conBottom =this.canvas.width /6.5
       this.bowlWidth = this.canvas.width + this.canvas.width / 2
       this.bowlHeight = this.canvas.height * 0.75
       this.bowlX = this.canvas.width / 3
+      this.x= this.canvas.width / 1.1,
       this.newBowlX = this.bowlX / -0.7
       this.startBtnWidth = this.canvas.width / 2.45
       this.startBtnHeight = this.canvas.width / 1.7
@@ -351,8 +433,11 @@ export default {
           this.startBtnWidth,
           this.startBtnHeight
         )
+        this.gosup =false
         this.started = false
+        this.gameOver = false
       this.score = 0
+      this.velocity();
     },
     makeAvatar() {
       this.avatar = new Image()
@@ -390,20 +475,6 @@ export default {
       this.startBtnX = this.canvas.width * 0.001
       this.startBtnY = 0
     },
-    // avatarClick(event) {
-    //   const clickX = event.offsetX
-    //   const clickY = event.offsetY
-    //   if (
-    //     clickX >= this.avatarX &&
-    //     clickX <= this.avatarX + this.avatarWidth &&
-    //     clickY >= this.avatarY &&
-    //     clickY <= this.avatarY + this.avatarHeight
-    //   ) {
-    //     if (this.started === false) {
-    //       this.moveBowl()
-    //     }
-    //   }
-    // },
     makeBowl() {
       this.bowl = new Image()
       this.bowl.src = '/bowl.png'
