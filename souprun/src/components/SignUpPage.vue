@@ -14,11 +14,11 @@
 <script setup>
 import { ref } from 'vue';
 import { supabase } from '../clients/supabase';
-import { defineStore } from 'pinia'
+import { defineStore } from 'pinia';
 
-let email = ref("")
-let password = ref("")
-let username = ref("")
+let email = ref("");
+let password = ref("");
+let username = ref("");
 
 async function CreateAccount() {
   const { user, error } = await supabase.auth.signUp({
@@ -44,12 +44,15 @@ async function CreateAccount() {
 </script>
 
 <script>
-export const useTaskStore = defineStore('taskStore', {
-state:() => ({
-  emaill: email.value
-})
-})
+export const useTaskStore = defineStore('taskStore', () => {
+  const email = ref(""); // Define email in the store's state
+  
+  return {
+    email, // Expose email as a store property
+  };
+});
 </script>
+
 
 
 <style>
