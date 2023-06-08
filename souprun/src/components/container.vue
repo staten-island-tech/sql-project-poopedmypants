@@ -12,7 +12,8 @@ import { ref } from 'vue';
 </template>
 
 <script>
-
+import { useTaskStore } from './SignUpPage.vue';
+const taskStore = useTaskStore()
 export default {
   data() {
     //very sorry for all these variables .-.
@@ -134,6 +135,7 @@ export default {
               .from('clients')
               // .select('username')
               .update({ score: this.score })
+              .eq('email', taskStore.email)
               if (data) {
                 console.log(data)
               }
@@ -387,7 +389,7 @@ export default {
         this.ctx.drawImage(this.bowl, this.bowlX, this.conBottom, this.bowlWidth, this.bowlHeight)
         if (this.up === true) {
           if (this.avatarY <= this.conBottom + this.canvas.width * 0.05) {
-            this.avatarY += this.canvas.width / 100
+            this.avatarY += this.canvas.width / 110
             this.ctx.drawImage(
               this.avatar,
               this.avatarX,
@@ -402,7 +404,7 @@ export default {
         }
         if (this.up === false) {
           if (this.avatarY >= this.conBottom / -4) {
-            this.avatarY -= this.canvas.width / 100
+            this.avatarY -= this.canvas.width / 110
             this.ctx.drawImage(
               this.avatar,
               this.avatarX,
