@@ -2,6 +2,7 @@
   <div id="container">
    <form @submit.prevent="login">
      <p>SIGN UP</p>
+     <input v-model="username" type="name" placeholder="Username" />
      <input v-model="email" type="email" placeholder="Email" />
      <input v-model="password" type="password" placeholder="Password" />
      <router-link :to="{ path: '/' }"><button @click="CreateAccount" class="logsign" id="sign-up">SIGN UP</button></router-link>
@@ -15,11 +16,17 @@ import { ref } from 'vue';
 import { supabase } from '../clients/supabase';
 let email = ref("")
 let password = ref("")
+let username = ref("")
 
 async function CreateAccount(){
  const {data, error} = await supabase.auth.signUp({
   email: email.value,
-  password: password.value
+  password: password.value,
+  options:{
+    data: {
+      username: username.value
+    }
+  }
  })
  if(error){
   console.log(error)

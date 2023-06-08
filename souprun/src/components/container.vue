@@ -133,7 +133,7 @@ export default {
               .insert(
                 { 
                   username: 'pooped', 
-                  score: 'this.score',
+                  score: this.score,
                 }
               )
               if (data) {
