@@ -27,19 +27,18 @@ async function loginn(){
     console.log(error)  
   } else{
     console.log(data)
+    getSession();
   }
 }
 
 </script>
 <script>
 const account = ref();
-getSession();
 
 async function getSession() {
 	account.value = await supabase.auth.getSession();
-	console.log(account.value)
+  console.log(account.value.data.session.user.user_metadata.username)
 }
-export {account}
 </script>
 
 <style>

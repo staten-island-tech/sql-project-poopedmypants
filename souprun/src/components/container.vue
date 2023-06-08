@@ -1,5 +1,6 @@
 <script setup>
 import { supabase } from '../clients/supabase'
+import { ref } from 'vue';
 // import score from '../components/score.vue'
 </script>
 <template>
@@ -11,6 +12,7 @@ import { supabase } from '../clients/supabase'
 </template>
 
 <script>
+
 export default {
   data() {
     //very sorry for all these variables .-.
@@ -126,16 +128,12 @@ export default {
           if (this.i === 2) {
             this.i = 4
           }
-          const insertScores = async () => {
+          const insertClients = async () => {
            try{        
               const { data, error } = await supabase
-              .from('scores')
-              .insert(
-                { 
-                  username: 'pooped', 
-                  score: this.score,
-                }
-              )
+              .from('clients')
+              // .select('username')
+              .update({ score: this.score })
               if (data) {
                 console.log(data)
               }
@@ -143,7 +141,7 @@ export default {
                 console.log(error)
               }
             }
-            insertScores()
+            insertClients()
           this.avatar.src = this.avatarList[this.i]
           this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height)
           this.ctx.drawImage(this.bowl, this.bowlX, this.conBottom, this.bowlWidth, this.bowlHeight)

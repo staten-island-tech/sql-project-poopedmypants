@@ -8,7 +8,6 @@
     </main>
 </template>
 <script setup>
-import { account } from "./loginPage.vue";
 </script>
 <style>
 #login{

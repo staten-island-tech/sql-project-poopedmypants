@@ -18,22 +18,26 @@ let email = ref("")
 let password = ref("")
 let username = ref("")
 
-async function CreateAccount(){
- const {data, error} = await supabase.auth.signUp({
-  email: email.value,
-  password: password.value,
-  options:{
-    data: {
-      username: username.value
+async function CreateAccount() {
+  const { user, error } = await supabase.auth.signUp({
+    email: email.value,
+    password: password.value,
+  });
+
+  if (error) {
+    console.log(error);
+  } else {
+    console.log(user);
+    const { data, error } = await supabase
+      .from('clients')
+      .insert([{ email: email.value, username: username.value }]);
+      
+    if (error) {
+      console.log(error);
+    } else {
+      console.log(data);
     }
   }
- })
- if(error){
-  console.log(error)
- }
- else{
-  console.log(data)
- }
 }
 </script>
 
