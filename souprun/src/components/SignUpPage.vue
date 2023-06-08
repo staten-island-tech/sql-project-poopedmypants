@@ -5,7 +5,7 @@
      <input v-model="username" type="name" placeholder="Username" />
      <input v-model="email" type="email" placeholder="Email" />
      <input v-model="password" type="password" placeholder="Password" />
-     <router-link :to="{ path: '/' }"><button @click="CreateAccount" class="logsign" id="sign-up">SIGN UP</button></router-link>
+     <router-link :to="{ path: '/login' }"><button @click="CreateAccount" class="logsign" id="sign-up">SIGN UP</button></router-link>
      <router-link :to="{ path: '/login' }"><button class="logsign" id="log-in">LOGIN</button></router-link>
    </form>
  </div>
@@ -14,11 +14,12 @@
 <script setup>
 import { ref } from 'vue';
 import { supabase } from '../clients/supabase';
-import { defineStore } from 'pinia';
-
+import { storeToRefs } from 'pinia';
+import { useTaskStore } from './taskStore';
 let email = ref("");
 let password = ref("");
 let username = ref("");
+let taskStore = storeToRefs(useTaskStore());
 
 async function CreateAccount() {
   const { user, error } = await supabase.auth.signUp({
@@ -33,7 +34,7 @@ async function CreateAccount() {
     const { data, error } = await supabase
       .from('clients')
       .insert([{ email: email.value, username: username.value }]);
-      
+      taskStore.user.value = data.user
     if (error) {
       console.log(error);
     } else {
@@ -43,15 +44,6 @@ async function CreateAccount() {
 }
 </script>
 
-<script>
-export const useTaskStore = defineStore('taskStore', () => {
-  const email = ref(""); // Define email in the store's state
-  
-  return {
-    email, // Expose email as a store property
-  };
-});
-</script>
 
 
 

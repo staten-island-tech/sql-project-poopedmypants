@@ -4,7 +4,7 @@
       <p>LOGIN</p>
       <input v-model="email" type="email" placeholder="Email" />
       <input v-model="password" type="password" placeholder="Password" />
-      <router-link :to="{ path: '/' }"><button @click="loginn" class="logsign" id="log-in">LOGIN</button></router-link>
+      <button @click="loginn" class="logsign" id="log-in">LOGIN</button>
       <router-link :to="{ path: '/signup' }"><button class="logsign" id="sign-up">SIGN UP</button></router-link>
     </form>
   </div>
@@ -13,9 +13,13 @@
 <script setup>
 import { ref } from 'vue';
 import { supabase } from '../clients/supabase';
+import { storeToRefs } from 'pinia';
+import { useTaskStore } from './taskStore';
+import router from '../router';
 
 let email = ref("")
 let password = ref("")
+let taskStore = storeToRefs(useTaskStore());
 
 async function loginn(){
   const { data, error } = await supabase.auth.signInWithPassword({
@@ -27,8 +31,10 @@ async function loginn(){
     console.log(error)  
   } else{
     console.log(data)
-    getSession();
+    taskStore.user.value = data.user
+    router.push ('/')
   }
+
 }
 
 </script>

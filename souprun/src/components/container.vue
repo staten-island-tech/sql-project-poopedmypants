@@ -1,19 +1,17 @@
 <script setup>
 import { supabase } from '../clients/supabase'
 import { ref } from 'vue';
-import { useTaskStore } from './SignUpPage.vue';
-const taskStore = useTaskStore()
-// import score from '../components/score.vue'
 </script>
 <template>
   <div>
-    <!-- <score :started="started"/> -->
     <p id="score">SCORE: {{ this.score }}</p>
     <canvas id="con"></canvas>
   </div>
 </template>
 
 <script>
+import { useTaskStore } from './taskStore.js';
+import { storeToRefs } from 'pinia';
 export default {
   data() {
     //very sorry for all these variables .-.
@@ -72,10 +70,12 @@ export default {
       rbtnY: 0,
       rbtnWidth: 0,
       rbtnHeight: 0,
-      speeed: null
+      speeed: null,
+      something: null,
     }
   },
   mounted() {
+    this.something = ((storeToRefs(useTaskStore())).user._rawValue || {}).email
     this.canvas = document.querySelector('canvas')
     this.canvas.width = window.innerWidth * 0.75
     this.canvas.height = this.canvas.width * 0.6
@@ -135,7 +135,7 @@ export default {
               .from('clients')
               // .select('username')
               .update({ score: this.score })
-              .eq('email', taskStore.emaill)
+              .eq('email', this.taskStore.user._rawValue.email)
               if (data) {
                 console.log(data)
               }
