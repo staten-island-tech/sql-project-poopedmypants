@@ -1,4 +1,5 @@
 <script setup>
+import { supabase } from '../clients/supabase'
 // import score from '../components/score.vue'
 </script>
 <template>
@@ -109,6 +110,7 @@ export default {
           setTimeout(() => {
             this.spawnObstacle()
             this.startTimer()
+            //score counter
           }, 4000)
         }
       }
@@ -124,6 +126,24 @@ export default {
           if (this.i === 2) {
             this.i = 4
           }
+          const insertScores = async () => {
+           try{        
+              const { data, error } = await supabase
+              .from('scores')
+              .insert(
+                { 
+                  username: 'pooped', 
+                  score: 'this.score',
+                }
+              )
+              if (data) {
+                console.log(data)
+              }
+              } catch (error) {
+                console.log(error)
+              }
+            }
+            insertScores()
           this.avatar.src = this.avatarList[this.i]
           this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height)
           this.ctx.drawImage(this.bowl, this.bowlX, this.conBottom, this.bowlWidth, this.bowlHeight)
@@ -299,6 +319,7 @@ export default {
         }
       }, scoreup)
     },
+    //score is counted
     velocity() {
       if (this.score < 2300) {
         this.a = Math.floor(this.score / 50) * 2
@@ -407,6 +428,7 @@ export default {
       if (this.i === 4) {
         this.i = 2
       }
+      //resets the entire thing
       this.avatar.src = this.avatarList[this.i]
       this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height)
       this.canvas.width = window.innerWidth * 0.75
@@ -446,6 +468,7 @@ export default {
       this.score = 0
       this.velocity()
     },
+    //score is reset
     makeAvatar() {
       this.avatar = new Image()
       this.avatar.src = this.avatarList[this.i]
