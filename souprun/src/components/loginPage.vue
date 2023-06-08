@@ -1,43 +1,45 @@
 <template>
    <div id="container">
     <form @submit.prevent="login">
-      <input v-model="username" type="text" placeholder="Username" />
+      <p>LOGIN</p>
+      <input v-model="email" type="email" placeholder="Email" />
       <input v-model="password" type="password" placeholder="Password" />
-      <router-link :to="{ path: '/' }"><button class="logsign" id="sign-up">LOGIN</button></router-link>
-      <router-link :to="{ path: '/' }"><button class="logsign" id="log-in">SIGN UP</button></router-link>
+      <router-link :to="{ path: '/' }"><button @click="loginn" class="logsign" id="log-in">LOGIN</button></router-link>
+      <router-link :to="{ path: '/signup' }"><button class="logsign" id="sign-up">SIGN UP</button></router-link>
     </form>
   </div>
 </template>
 
-<script>
-//ness: logic for login 
-export default {
-  data() {
-    return {
-      email: '',
-      password: '',
-    }
-  },
+<script setup>
+import { ref } from 'vue';
+import { supabase } from '../clients/supabase';
 
-  methods: {
-    async login() {
-      try {
-        const { user, error } = await this.$supabase.auth.signIn({
-          email: this.email,
-          password: this.password,
-        })
-        //access stuff here
-        if (error) {
-          console.log(error.message)
-        } else {
-          console.log('Logged in successfully', user)
-        }
-      } catch (error) {
-        console.log('An error occurred:', error.message)
-      }
-    },
-  },
+let email = ref("")
+let password = ref("")
+
+async function loginn(){
+  const { data, error } = await supabase.auth.signInWithPassword({
+    email: email.value,
+    password: password.value
+  })
+  if(error){
+    window.alert(error);
+    console.log(error)  
+  } else{
+    console.log(data)
+  }
 }
+
+</script>
+<script>
+const account = ref();
+getSession();
+
+async function getSession() {
+	account.value = await supabase.auth.getSession();
+	console.log(account.value)
+}
+export {account}
 </script>
 
 <style>
