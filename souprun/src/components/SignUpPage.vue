@@ -1,73 +1,54 @@
 <template>
   <div id="container">
-    <form @submit.prevent="login">
-      <p>SIGN UP</p>
-      <input v-model="email" type="email" placeholder="Email" />
-      <input v-model="password" type="password" placeholder="Password" />
-      <input v-model="username" type="name" placeholder="Username" />
-      <router-link :to="{ path: '/' }">
-        <button @click="CreateAccount" class="logsign" id="sign-up">
-          SIGN UP
-        </button>
-      </router-link>
-      <router-link :to="{ path: '/login' }">
-        <button class="logsign" id="log-in">LOGIN</button>
-      </router-link>
-    </form>
-  </div>
+   <form @submit.prevent="login">
+     <p>SIGN UP</p>
+     <input v-model="username" type="name" placeholder="Username" />
+     <input v-model="email" type="email" placeholder="Email" />
+     <input v-model="password" type="password" placeholder="Password" />
+     <router-link :to="{ path: '/' }"><button @click="CreateAccount" class="logsign" id="sign-up">SIGN UP</button></router-link>
+     <router-link :to="{ path: '/login' }"><button class="logsign" id="log-in">LOGIN</button></router-link>
+   </form>
+ </div>
 </template>
 
-<script>
+<script setup>
 import { ref } from 'vue';
 import { supabase } from '../clients/supabase';
-import { defineStore } from 'pinia';
+import { defineStore } from 'pinia'
 
-export default {
-  setup() {
-    const email = ref('');
-    const password = ref('');
-    const username = ref('');
+let email = ref("")
+let password = ref("")
+let username = ref("")
 
-    async function CreateAccount() {
-      const { user, error } = await supabase.auth.signUp({
-        email: email.value,
-        password: password.value,
-      });
+async function CreateAccount() {
+  const { user, error } = await supabase.auth.signUp({
+    email: email.value,
+    password: password.value,
+  });
 
-      if (error) {
-        console.log(error);
-      } else {
-        console.log(user);
-        const { data, error } = await supabase.from('clients').insert([
-          { email: email.value, username: username.value },
-        ]);
-
-        if (error) {
-          console.log(error);
-        } else {
-          console.log(data);
-        }
-      }
+  if (error) {
+    console.log(error);
+  } else {
+    console.log(user);
+    const { data, error } = await supabase
+      .from('clients')
+      .insert([{ email: email.value, username: username.value }]);
+      
+    if (error) {
+      console.log(error);
+    } else {
+      console.log(data);
     }
+  }
+}
+</script>
 
-    return {
-      email,
-      password,
-      username,
-      CreateAccount,
-    };
-  },
-};
-
+<script>
 export const useTaskStore = defineStore('taskStore', {
-  state: () => ({
-    task: [{ pee: 1, poo: 2 }],
-  }),
-  getters: {
-    email: (state, getters) => getters.emailValue,
-    emailValue: (state, getters) => getters.emailValue,
-  },
-});
+state:() => ({
+  emaill: email.value
+})
+})
 </script>
 
 

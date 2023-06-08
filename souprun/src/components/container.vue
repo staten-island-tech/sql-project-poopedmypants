@@ -1,6 +1,8 @@
 <script setup>
 import { supabase } from '../clients/supabase'
 import { ref } from 'vue';
+import { useTaskStore } from './SignUpPage.vue';
+const taskStore = useTaskStore()
 // import score from '../components/score.vue'
 </script>
 <template>
@@ -12,8 +14,6 @@ import { ref } from 'vue';
 </template>
 
 <script>
-import { useTaskStore } from './SignUpPage.vue';
-const taskStore = useTaskStore()
 export default {
   data() {
     //very sorry for all these variables .-.
@@ -135,7 +135,7 @@ export default {
               .from('clients')
               // .select('username')
               .update({ score: this.score })
-              .eq('email', taskStore.email)
+              .eq('email', taskStore.emaill)
               if (data) {
                 console.log(data)
               }
