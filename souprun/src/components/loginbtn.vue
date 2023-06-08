@@ -3,7 +3,7 @@
     <main>
         <div>
             <!-- <router-link :to="{ path: '/login' }" id="login">{{ account.data.session.user.email }}</router-link> -->
-            <router-link :to="{ path: '/login' }" id="login"> {{ account.data.session.user.email }}</router-link>
+            <router-link :to="{ path: '/login' }" id="login"> LOGIN</router-link>
         </div>
     
     </main>
