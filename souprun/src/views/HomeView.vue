@@ -6,7 +6,7 @@ import loginbtn from '../components/loginbtn.vue'
 <template>
   <main>
     <div>
-      <p id="guide">DONT BE DUMB: <br/>click the character charms to change characters <br/>click the character to start game <br/>click gamescreen/spacebar to jump
+      <p id="guide">DONT BE A DUMMY: <br/>click the character charms to change characters <br/>click the character to start game <br/>click gamescreen/spacebar to jump
       </p>
       <loginbtn/>
       <logoutbtn/>
