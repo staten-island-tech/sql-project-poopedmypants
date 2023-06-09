@@ -77,10 +77,14 @@ export default {
       lba:0,
       lbb:0,
       lbc:0,
+      firstUsername: "",
+      secondUsername: "",
+      thirdUsername: "",
     }
   },
   mounted() {
     this.lbsi();
+    this.lbsiU();
     //im missing code here ??
     this.something = ((storeToRefs(useTaskStore())).user._rawValue || {}).email
     this.canvas = document.querySelector('canvas')
@@ -190,6 +194,26 @@ export default {
             }
             insertHs();
     },
+    lbsiU(){
+      const insertHsz = async () => {
+           try{        
+              const { data, error } = await supabase
+              .from('clients')
+               .select('username');
+              
+               this.lba.username = this.firstUsername
+              this.lbb.username = this.secondUsername
+              this.lbc.username = this.thirdUsername
+              if (data) {
+                console.log(data)
+                this.lbg();
+              }
+              } catch (error) {
+                console.log(error)
+              }
+            }
+            insertHsz();
+    },
     lbg(){
      this.first() 
      this.second()
@@ -237,7 +261,7 @@ export default {
       if (this.started === false) {
           this.fss = this.canvas.width / 50 + 'px Cute Font, cursive'
           this.ctx.font = this.fss
-          this.ctx.fillText("777777", this.dikx, this.dikY)
+          this.ctx.fillText(this.firstUsername, this.dikx, this.dikY)
           this.dikx = this.canvas.width / 3.85
           this.dikY = this.conBottom * 1.7
           this.ctx.fillStyle = 'rgba(104,22,22,255)'
@@ -248,7 +272,7 @@ export default {
       if (this.started === false) {
           this.fss = this.canvas.width / 50 + 'px Cute Font, cursive'
           this.ctx.font = this.fss
-          this.ctx.fillText("777777", this.difx, this.difY)
+          this.ctx.fillText(this.secondUsername, this.difx, this.difY)
           this.difx = this.canvas.width / 3.7
           this.difY = this.conBottom * 2.12
           this.ctx.fillStyle = 'rgba(104,22,22,255)'
@@ -259,7 +283,7 @@ export default {
       if (this.started === false) {
           this.fss = this.canvas.width / 50 + 'px Cute Font, cursive'
           this.ctx.font = this.fss
-          this.ctx.fillText("777777", this.difx, this.digY)
+          this.ctx.fillText(this.thirdUsername, this.difx, this.digY)
           this.difx = this.canvas.width / 3.7
           this.digY = this.conBottom * 2.5
           this.ctx.fillStyle = 'rgba(104,22,22,255)'
@@ -564,6 +588,7 @@ export default {
       this.avatarY = this.conBottom - this.canvas.width * 0.1
       this.newAvatarY = this.conBottom + this.canvas.width * 0.05
       this.lbsi();
+      this.lbsiU();
       this.ctx.drawImage(
         this.avatar,
         this.avatarX,
