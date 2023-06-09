@@ -135,7 +135,7 @@ export default {
               .from('clients')
               // .select('username')
               .update({ score: this.score })
-              .eq('email', this.taskStore.user._rawValue.email)
+              .eq('email', this.something)
               if (data) {
                 console.log(data)
               }
