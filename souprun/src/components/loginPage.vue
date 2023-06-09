@@ -1,42 +1,43 @@
 <template>
    <div id="container">
     <form @submit.prevent="login">
-      <p>LOGIN</p>
-      <input v-model="email" type="email" placeholder="Email" />
+      <input v-model="username" type="text" placeholder="Username" />
       <input v-model="password" type="password" placeholder="Password" />
-      <button @click="loginn" class="logsign" id="log-in">LOGIN</button>
-      <router-link :to="{ path: '/signup' }"><button class="logsign" id="sign-up">SIGN UP</button></router-link>
+      <router-link :to="{ path: '/' }"><button class="logsign" id="sign-up">LOGIN</button></router-link>
+      <router-link :to="{ path: '/' }"><button class="logsign" id="log-in">SIGN UP</button></router-link>
     </form>
   </div>
 </template>
 
-<script setup>
-import { ref } from 'vue';
-import { supabase } from '../clients/supabase';
-import { storeToRefs } from 'pinia';
-import { useTaskStore } from './taskStore';
-import router from '../router';
+<script>
+//ness: logic for login 
+export default {
+  data() {
+    return {
+      email: '',
+      password: '',
+    }
+  },
 
-let email = ref("")
-let password = ref("")
-let taskStore = storeToRefs(useTaskStore());
-
-async function loginn(){
-  const { data, error } = await supabase.auth.signInWithPassword({
-    email: email.value,
-    password: password.value
-  })
-  if(error){
-    window.alert(error);
-    console.log(error)  
-  } else{
-    console.log(data)
-    taskStore.user.value = data.user
-    router.push ('/')
-  }
-
+  methods: {
+    async login() {
+      try {
+        const { user, error } = await this.$supabase.auth.signIn({
+          email: this.email,
+          password: this.password,
+        })
+        //access stuff here
+        if (error) {
+          console.log(error.message)
+        } else {
+          console.log('Logged in successfully', user)
+        }
+      } catch (error) {
+        console.log('An error occurred:', error.message)
+      }
+    },
+  },
 }
-
 </script>
 
 <style>
