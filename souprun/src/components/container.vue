@@ -173,6 +173,7 @@ export default {
      this.thirdu()
      this.hs() 
     },
+//REPLACE DA NUMBER HERRRRRRRRRRRREEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE
     first() {
       if (this.started === false) {
           this.fs = this.canvas.width / 35 + 'px Cute Font, cursive'
@@ -374,6 +375,7 @@ export default {
         }
       }
     },
+    //AND HERRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRREEEEEEEEEEEEEEEEEEEEEEEEEEE
     p() {
       if (this.started === false) {
         if (this.gosup === true) {
