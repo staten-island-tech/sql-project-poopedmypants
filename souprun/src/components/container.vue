@@ -1,17 +1,15 @@
 <script setup>
-import { supabase } from '../clients/supabase'
-import { ref } from 'vue';
+// import score from '../components/score.vue'
 </script>
 <template>
   <div>
+    <!-- <score :started="started"/> -->
     <p id="score">SCORE: {{ this.score }}</p>
     <canvas id="con"></canvas>
   </div>
 </template>
 
 <script>
-import { useTaskStore } from './taskStore.js';
-import { storeToRefs } from 'pinia';
 export default {
   data() {
     //very sorry for all these variables .-.
@@ -71,11 +69,9 @@ export default {
       rbtnWidth: 0,
       rbtnHeight: 0,
       speeed: null,
-      something: null,
     }
   },
   mounted() {
-    this.something = ((storeToRefs(useTaskStore())).user._rawValue || {}).email
     this.canvas = document.querySelector('canvas')
     this.canvas.width = window.innerWidth * 0.75
     this.canvas.height = this.canvas.width * 0.6
@@ -87,6 +83,7 @@ export default {
     this.makeLeaderBoard()
     this.avatarList = ['/bun.png', '/cat.png', '/hippo.png', '/bundied.png', '/hippodead.png']
     this.makeAvatar()
+    this.lbg()
     this.obbyImage = new Image()
     this.obbyImage.src = '/obby1.png'
     this.speed = this.canvas.width / 100
@@ -113,7 +110,6 @@ export default {
           setTimeout(() => {
             this.spawnObstacle()
             this.startTimer()
-            //score counter
           }, 4000)
         }
       }
@@ -129,21 +125,6 @@ export default {
           if (this.i === 2) {
             this.i = 4
           }
-          const insertClients = async () => {
-           try{        
-              const { data, error } = await supabase
-              .from('clients')
-              // .select('username')
-              .update({ score: this.score })
-              .eq('email', this.something)
-              if (data) {
-                console.log(data)
-              }
-              } catch (error) {
-                console.log(error)
-              }
-            }
-            insertClients()
           this.avatar.src = this.avatarList[this.i]
           this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height)
           this.ctx.drawImage(this.bowl, this.bowlX, this.conBottom, this.bowlWidth, this.bowlHeight)
@@ -160,6 +141,92 @@ export default {
     }
   },
   methods: {
+    lbg(){
+     this.first() 
+     this.second()
+     this.third()
+     this.firstu()
+     this.secondu()
+     this.thirdu()
+     this.hs() 
+    },
+    first() {
+      if (this.started === false) {
+          this.fs = this.canvas.width / 35 + 'px Cute Font, cursive'
+          this.ctx.font = this.fs
+          this.ctx.fillText("69999999999", this.lbx, this.firstY)
+          this.lbx = this.canvas.width / 7
+          this.firstY = this.conBottom * 1.54
+          this.ctx.fillStyle = 'rgba(104,22,22,255)'
+          requestAnimationFrame(this.first)
+        }
+    },
+    second() {
+      if (this.started === false) {
+          this.fs = this.canvas.width / 35 + 'px Cute Font, cursive'
+          this.ctx.font = this.fs
+          this.ctx.fillText("55555555", this.secondx, this.secondY)
+          this.secondx = this.canvas.width / 8
+          this.secondY = this.conBottom * 2
+          this.ctx.fillStyle = 'rgba(104,22,22,255)'
+          requestAnimationFrame(this.second)
+        }
+    },
+    third() {
+      if (this.started === false) {
+          this.fs = this.canvas.width / 35 + 'px Cute Font, cursive'
+          this.ctx.font = this.fs
+          this.ctx.fillText("666666", this.secondx, this.thirdY)
+          this.secondx = this.canvas.width / 8
+          this.thirdY = this.conBottom * 2.38
+          this.ctx.fillStyle = 'rgba(104,22,22,255)'
+          requestAnimationFrame(this.third)
+        }
+    },
+    firstu() {
+      if (this.started === false) {
+          this.fss = this.canvas.width / 50 + 'px Cute Font, cursive'
+          this.ctx.font = this.fss
+          this.ctx.fillText("777777", this.dikx, this.dikY)
+          this.dikx = this.canvas.width / 3.85
+          this.dikY = this.conBottom * 1.7
+          this.ctx.fillStyle = 'rgba(104,22,22,255)'
+          requestAnimationFrame(this.firstu)
+        }
+    },
+    secondu() {
+      if (this.started === false) {
+          this.fss = this.canvas.width / 50 + 'px Cute Font, cursive'
+          this.ctx.font = this.fss
+          this.ctx.fillText("777777", this.difx, this.difY)
+          this.difx = this.canvas.width / 3.7
+          this.difY = this.conBottom * 2.12
+          this.ctx.fillStyle = 'rgba(104,22,22,255)'
+          requestAnimationFrame(this.secondu)
+        }
+    },
+    thirdu() {
+      if (this.started === false) {
+          this.fss = this.canvas.width / 50 + 'px Cute Font, cursive'
+          this.ctx.font = this.fss
+          this.ctx.fillText("777777", this.difx, this.digY)
+          this.difx = this.canvas.width / 3.7
+          this.digY = this.conBottom * 2.5
+          this.ctx.fillStyle = 'rgba(104,22,22,255)'
+          requestAnimationFrame(this.thirdu)
+        }
+    },
+    hs() {
+      if (this.started === false) {
+          this.fsss = this.canvas.width / 30 + 'px Cute Font, cursive'
+          this.ctx.font = this.fsss
+          this.ctx.fillText("420", this.hsx, this.hsY)
+          this.hsx = this.canvas.width / 11
+          this.hsY = this.conBottom * 3
+          this.ctx.fillStyle = 'rgba(104,22,22,255)'
+          requestAnimationFrame(this.hs)
+        }
+    },
     goScreen() {
       this.gos = new Image()
       this.gos.src = '/gameover.png'
@@ -319,7 +386,6 @@ export default {
         }
       }, scoreup)
     },
-    //score is counted
     velocity() {
       if (this.score < 2300) {
         this.a = Math.floor(this.score / 50) * 2
@@ -389,7 +455,7 @@ export default {
         this.ctx.drawImage(this.bowl, this.bowlX, this.conBottom, this.bowlWidth, this.bowlHeight)
         if (this.up === true) {
           if (this.avatarY <= this.conBottom + this.canvas.width * 0.05) {
-            this.avatarY += this.canvas.width / 110
+            this.avatarY += this.canvas.width / 100
             this.ctx.drawImage(
               this.avatar,
               this.avatarX,
@@ -404,7 +470,7 @@ export default {
         }
         if (this.up === false) {
           if (this.avatarY >= this.conBottom / -4) {
-            this.avatarY -= this.canvas.width / 110
+            this.avatarY -= this.canvas.width / 100
             this.ctx.drawImage(
               this.avatar,
               this.avatarX,
@@ -428,7 +494,6 @@ export default {
       if (this.i === 4) {
         this.i = 2
       }
-      //resets the entire thing
       this.avatar.src = this.avatarList[this.i]
       this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height)
       this.canvas.width = window.innerWidth * 0.75
@@ -447,6 +512,7 @@ export default {
       this.avatarX = this.canvas.width / 1.5
       this.avatarY = this.conBottom - this.canvas.width * 0.1
       this.newAvatarY = this.conBottom + this.canvas.width * 0.05
+      this.lbg()
       this.ctx.drawImage(
         this.avatar,
         this.avatarX,
@@ -468,7 +534,6 @@ export default {
       this.score = 0
       this.velocity()
     },
-    //score is reset
     makeAvatar() {
       this.avatar = new Image()
       this.avatar.src = this.avatarList[this.i]
