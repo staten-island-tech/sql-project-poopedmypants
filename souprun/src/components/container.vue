@@ -1,5 +1,9 @@
 <script setup>
+<<<<<<< HEAD
 import { supabase } from '../clients/supabase'
+=======
+// import score from '../components/score.vue'
+>>>>>>> parent of 3028ceb (Merge pull request #1 from staten-island-tech/thisone)
 </script>
 <template>
   <div>
@@ -10,9 +14,12 @@ import { supabase } from '../clients/supabase'
 </template>
 
 <script>
+<<<<<<< HEAD
 
 import { useTaskStore } from './taskStore.js';
 import { storeToRefs } from 'pinia';
+=======
+>>>>>>> parent of 3028ceb (Merge pull request #1 from staten-island-tech/thisone)
 export default {
   data() {
     //very sorry for all these variables .-.
@@ -71,6 +78,7 @@ export default {
       rbtnY: 0,
       rbtnWidth: 0,
       rbtnHeight: 0,
+<<<<<<< HEAD
       speeed: null,
       something: null,
       lba:0,
@@ -86,6 +94,12 @@ export default {
     this.lbsiU();
     //im missing code here ??
     this.something = ((storeToRefs(useTaskStore())).user._rawValue || {}).email
+=======
+      speeed: null
+    }
+  },
+  mounted() {
+>>>>>>> parent of 3028ceb (Merge pull request #1 from staten-island-tech/thisone)
     this.canvas = document.querySelector('canvas')
     this.canvas.width = window.innerWidth * 0.75
     this.canvas.height = this.canvas.width * 0.6
@@ -97,7 +111,6 @@ export default {
     this.makeLeaderBoard()
     this.avatarList = ['/bun.png', '/cat.png', '/hippo.png', '/bundied.png', '/hippodead.png']
     this.makeAvatar()
-    // this.lbg()
     this.obbyImage = new Image()
     this.obbyImage.src = '/obby1.png'
     this.speed = this.canvas.width / 100
@@ -139,23 +152,6 @@ export default {
           if (this.i === 2) {
             this.i = 4
           }
-          const insertClients = async () => {
-           try{        
-              const { data, error } = await supabase
-              .from('clients')
-              // .select('username')
-              .update({ score: this.score })
-              .lt('score', this.score)
-              .eq('email', this.something)
-              .single();
-              if (data) {
-                console.log(data)
-              }
-              } catch (error) {
-                console.log(error)
-              }
-            }
-            insertClients()
           this.avatar.src = this.avatarList[this.i]
           this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height)
           this.ctx.drawImage(this.bowl, this.bowlX, this.conBottom, this.bowlWidth, this.bowlHeight)
@@ -172,6 +168,7 @@ export default {
     }
   },
   methods: {
+<<<<<<< HEAD
     lbsi(){
       const insertHs = async () => {
            try{        
@@ -300,6 +297,8 @@ export default {
           requestAnimationFrame(this.hs)
         }
     },
+=======
+>>>>>>> parent of 3028ceb (Merge pull request #1 from staten-island-tech/thisone)
     goScreen() {
       this.gos = new Image()
       this.gos.src = '/gameover.png'
@@ -424,7 +423,10 @@ export default {
         }
       }
     },
+<<<<<<< HEAD
     //AND HERRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRREEEEEEEEEEEEEEEEEEEEEEEEEEE
+=======
+>>>>>>> parent of 3028ceb (Merge pull request #1 from staten-island-tech/thisone)
     p() {
       if (this.started === false) {
         if (this.gosup === true) {
@@ -586,8 +588,11 @@ export default {
       this.avatarX = this.canvas.width / 1.5
       this.avatarY = this.conBottom - this.canvas.width * 0.1
       this.newAvatarY = this.conBottom + this.canvas.width * 0.05
+<<<<<<< HEAD
       this.lbsi();
       this.lbsiU();
+=======
+>>>>>>> parent of 3028ceb (Merge pull request #1 from staten-island-tech/thisone)
       this.ctx.drawImage(
         this.avatar,
         this.avatarX,
@@ -718,4 +723,4 @@ export default {
   font-size: 2vw;
   font-weight: bold;
 }
-</style> 
+</style>
