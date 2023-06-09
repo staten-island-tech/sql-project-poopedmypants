@@ -270,7 +270,7 @@ export default {
       if (this.started === false) {
           this.fsss = this.canvas.width / 30 + 'px Cute Font, cursive'
           this.ctx.font = this.fsss
-          this.ctx.fillText("420", this.hsx, this.hsY)
+          this.ctx.fillText("TBA", this.hsx, this.hsY)
           this.hsx = this.canvas.width / 11
           this.hsY = this.conBottom * 3
           this.ctx.fillStyle = 'rgba(104,22,22,255)'
