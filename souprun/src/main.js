@@ -1,11 +1,12 @@
 import "./assets/main.css"
 
 import { createApp } from 'vue';
+import { createPinia } from 'pinia';
 import App from './App.vue';
 import router from './router';
-import { supabase } from './supabase.js';
 
 const app = createApp(App);
+const pinia = createPinia();
+app.use(pinia);
 app.use(router);
-app.config.globalProperties.$supabase = supabase;
 app.mount('#app');
