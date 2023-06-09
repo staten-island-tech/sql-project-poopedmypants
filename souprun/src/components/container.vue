@@ -1,5 +1,6 @@
 <script setup>
 import { supabase } from '../clients/supabase'
+import { ref } from 'vue';
 </script>
 <template>
   <div>
@@ -9,7 +10,7 @@ import { supabase } from '../clients/supabase'
   </div>
 </template>
 
-<script>
+<script> 
 
 import { useTaskStore } from './taskStore.js';
 import { storeToRefs } from 'pinia';
@@ -56,7 +57,7 @@ export default {
       testerx: 0,
       hippox: 0,
       bunx: 0,
-      gameOver: false,
+      gameOver: true,
       gos: null,
       gosX: 0,
       gosY: 0,
@@ -172,49 +173,43 @@ export default {
     }
   },
   methods: {
-    lbsi(){
-      const insertHs = async () => {
-           try{        
-              const { data, error } = await supabase
-              .from('clients')
-               .select('score');
-              const sortedData = data.map((item) => item.score).sort((a, b) => b - a);  
-              const [highestNumber, secondHighestNumber, thirdHighestNumber] = sortedData.slice(0, 3);
-              this.lba = highestNumber
-              this.lbb = secondHighestNumber
-              this.lbc = thirdHighestNumber
-              if (data) {
-                console.log(data)
-                this.lbg();
-              }
-              } catch (error) {
-                console.log(error)
-              }
-            }
-            insertHs();
-    },
-    lbsiU(){
-      const insertHsz = async () => {
-           try{        
-              const { data, error } = await supabase
-              .from('clients')
-               .select('username');
-              
-               this.lba.username = this.firstUsername
-              this.lbb.username = this.secondUsername
-              this.lbc.username = this.thirdUsername
-              if (data) {
-                console.log(data)
-                this.lbg();
-              }
-              } catch (error) {
-                console.log(error)
-              }
-            }
-            insertHsz();
-    },
+    lbsi() {
+  const insertHs = async () => {
+    try {
+      const { data, error } = await supabase
+        .from('clients')
+        .select('score', 'username')
+        .order('score', { ascending: false });
+
+        console.log(data)
+        //only scores show
+      if (data) {
+        const [highestItem, secondHighestItem, thirdHighestItem] = data.slice(0, 3);
+
+        this.lba = highestItem.score;
+        this.lbb = secondHighestItem.score;
+        this.lbc = thirdHighestItem.score;
+
+        //WHATAWIDGU VWYGTIEVAIHUDBTYGKVGBDYILYHBVGuidyVGBAKYTJUWAv GDJAJZ]
+        // SCREW THIS SHI TOHGEUESRVGBSAwvAHISVWAIYWBDIAUVWDVALUYWDGVBALIUH 
+        //ITS SUPPOSED TO WORK IT WORKS IT WORKS SDUOFHASEUFHIEIOEFIHEOSFOEFSIBOSEFUESFBUFESEFSBUSEBJFBJSEFKBJKSEFBJKFSEBJKFSEKGJSFEA BJKFESJKGBFSESEFBJK
+        this.firstu = highestItem.username;
+        this.secondu = secondHighestItem.username;
+        this.thirdu = thirdHighestItem.username;
+
+        console.log(data);
+        this.lbg();
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  insertHs();
+},
+
     lbg(){
-     this.first() 
+     this.first()
      this.second()
      this.third()
      this.firstu()
@@ -222,8 +217,8 @@ export default {
      this.thirdu()
      this.hs() 
     },
-//REPLACE DA NUMBER HERRRRRRRRRRRREEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE
-    first() {
+
+    first() { 
       if (this.started === false) {
           this.fs = this.canvas.width / 35 + 'px Cute Font, cursive'
           this.ctx.font = this.fs
@@ -260,7 +255,7 @@ export default {
       if (this.started === false) {
           this.fss = this.canvas.width / 50 + 'px Cute Font, cursive'
           this.ctx.font = this.fss
-          this.ctx.fillText(this.firstUsername, this.dikx, this.dikY)
+          this.ctx.fillText(this.firstu, this.dikx, this.dikY)
           this.dikx = this.canvas.width / 3.85
           this.dikY = this.conBottom * 1.7
           this.ctx.fillStyle = 'rgba(104,22,22,255)'
@@ -271,7 +266,7 @@ export default {
       if (this.started === false) {
           this.fss = this.canvas.width / 50 + 'px Cute Font, cursive'
           this.ctx.font = this.fss
-          this.ctx.fillText(this.secondUsername, this.difx, this.difY)
+          this.ctx.fillText(this.secondu, this.difx, this.difY)
           this.difx = this.canvas.width / 3.7
           this.difY = this.conBottom * 2.12
           this.ctx.fillStyle = 'rgba(104,22,22,255)'
@@ -282,7 +277,7 @@ export default {
       if (this.started === false) {
           this.fss = this.canvas.width / 50 + 'px Cute Font, cursive'
           this.ctx.font = this.fss
-          this.ctx.fillText(this.thirdUsername, this.difx, this.digY)
+          this.ctx.fillText(this.thirdu, this.difx, this.digY)
           this.difx = this.canvas.width / 3.7
           this.digY = this.conBottom * 2.5
           this.ctx.fillStyle = 'rgba(104,22,22,255)'
@@ -293,7 +288,7 @@ export default {
       if (this.started === false) {
           this.fsss = this.canvas.width / 30 + 'px Cute Font, cursive'
           this.ctx.font = this.fsss
-          this.ctx.fillText("TBA", this.hsx, this.hsY)
+          this.ctx.fillText("410", this.hsx, this.hsY)
           this.hsx = this.canvas.width / 11
           this.hsY = this.conBottom * 3
           this.ctx.fillStyle = 'rgba(104,22,22,255)'
@@ -424,7 +419,7 @@ export default {
         }
       }
     },
-    //AND HERRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRREEEEEEEEEEEEEEEEEEEEEEEEEEE
+    //ok
     p() {
       if (this.started === false) {
         if (this.gosup === true) {
