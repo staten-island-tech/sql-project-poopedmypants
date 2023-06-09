@@ -1,6 +1,5 @@
 <script setup>
 import { supabase } from '../clients/supabase'
-import { ref } from 'vue';
 </script>
 <template>
   <div>
@@ -10,26 +9,27 @@ import { ref } from 'vue';
   </div>
 </template>
 
-<script> 
+<script>
 
 import { useTaskStore } from './taskStore.js';
 import { storeToRefs } from 'pinia';
-
-const { data, error } = await supabase
-  .from('clients')
-  .select('score', 'username');
+// const insertHs = async () => {
+//            try{        
+//               const { data, error } = await supabase
+//               .from('clients')
+//                .select('score');
+//               const sortedData = data.map((item) => item.score).sort((a, b) => b - a);  
+//               const [highestNumber, secondHighestNumber, thirdHighestNumber] = sortedData.slice(0, 3);
+//               if (data) {
+//                 console.log(data)
+//                 return highestNumber, secondHighestNumber, thirdHighestNumber
+//               }
+//               } catch (error) {
+//                 console.log(error)
+//               }
+//             }
+//             insertHs()
   
-const sortedData = data.sort((a, b) => b.score - a.score);
-const [highestItem, secondHighestItem, thirdHighestItem] = sortedData.slice(0, 3);
-
-const highestUsername = highestItem.username;
-const secondHighestUsername = secondHighestItem.username;
-const thirdHighestUsername = thirdHighestItem.username;
-
-const highestNumber = highestItem.score;
-const secondHighestNumber = secondHighestItem.score;
-const thirdHighestNumber = thirdHighestItem.score;
-
 export default {
   data() {
     //very sorry for all these variables .-.
@@ -220,7 +220,7 @@ export default {
       if (this.started === false) {
           this.fs = this.canvas.width / 35 + 'px Cute Font, cursive'
           this.ctx.font = this.fs
-          this.ctx.fillText(highestNumber, this.lbx, this.firstY)
+          this.ctx.fillText(this.lba, this.lbx, this.firstY)
           this.lbx = this.canvas.width / 7
           this.firstY = this.conBottom * 1.54
           this.ctx.fillStyle = 'rgba(104,22,22,255)'
@@ -231,7 +231,7 @@ export default {
       if (this.started === false) {
           this.fs = this.canvas.width / 35 + 'px Cute Font, cursive'
           this.ctx.font = this.fs
-          this.ctx.fillText(secondHighestNumber, this.secondx, this.secondY)
+          this.ctx.fillText(this.lbb, this.secondx, this.secondY)
           this.secondx = this.canvas.width / 8
           this.secondY = this.conBottom * 2
           this.ctx.fillStyle = 'rgba(104,22,22,255)'
@@ -242,7 +242,7 @@ export default {
       if (this.started === false) {
           this.fs = this.canvas.width / 35 + 'px Cute Font, cursive'
           this.ctx.font = this.fs
-          this.ctx.fillText(thirdHighestNumber, this.secondx, this.thirdY)
+          this.ctx.fillText(this.lbc, this.secondx, this.thirdY)
           this.secondx = this.canvas.width / 8
           this.thirdY = this.conBottom * 2.38
           this.ctx.fillStyle = 'rgba(104,22,22,255)'
@@ -253,7 +253,7 @@ export default {
       if (this.started === false) {
           this.fss = this.canvas.width / 50 + 'px Cute Font, cursive'
           this.ctx.font = this.fss
-          this.ctx.fillText(highestUsername, this.dikx, this.dikY)
+          this.ctx.fillText("777777", this.dikx, this.dikY)
           this.dikx = this.canvas.width / 3.85
           this.dikY = this.conBottom * 1.7
           this.ctx.fillStyle = 'rgba(104,22,22,255)'
@@ -264,7 +264,7 @@ export default {
       if (this.started === false) {
           this.fss = this.canvas.width / 50 + 'px Cute Font, cursive'
           this.ctx.font = this.fss
-          this.ctx.fillText(secondHighestUsername, this.difx, this.difY)
+          this.ctx.fillText("777777", this.difx, this.difY)
           this.difx = this.canvas.width / 3.7
           this.difY = this.conBottom * 2.12
           this.ctx.fillStyle = 'rgba(104,22,22,255)'
@@ -275,7 +275,7 @@ export default {
       if (this.started === false) {
           this.fss = this.canvas.width / 50 + 'px Cute Font, cursive'
           this.ctx.font = this.fss
-          this.ctx.fillText(thirdHighestUsername, this.difx, this.digY)
+          this.ctx.fillText("777777", this.difx, this.digY)
           this.difx = this.canvas.width / 3.7
           this.digY = this.conBottom * 2.5
           this.ctx.fillStyle = 'rgba(104,22,22,255)'
