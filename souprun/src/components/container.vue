@@ -74,7 +74,6 @@ export default {
       rbtnHeight: 0,
       speeed: null,
       something: null,
-      highScore: 0,
     }
   },
   mounted() {
@@ -140,11 +139,9 @@ export default {
               .update({ score: this.score })
               .lt('score', this.score)
               .eq('email', this.something)
+              .single();
               if (data) {
-                console.log('Client score:', this.highScore);
-                this.highScore = data.score; // Assign the value from the 'score' column to a variable
                 console.log(data)
-                this.hs();
               }
               } catch (error) {
                 console.log(error)
@@ -246,7 +243,7 @@ export default {
       if (this.started === false) {
           this.fsss = this.canvas.width / 30 + 'px Cute Font, cursive'
           this.ctx.font = this.fsss
-          this.ctx.fillText(this.highScore, this.hsx, this.hsY)
+          this.ctx.fillText("420", this.hsx, this.hsY)
           this.hsx = this.canvas.width / 11
           this.hsY = this.conBottom * 3
           this.ctx.fillStyle = 'rgba(104,22,22,255)'
