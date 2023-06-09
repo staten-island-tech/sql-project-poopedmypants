@@ -83,6 +83,7 @@ export default {
     }
   },
   mounted() {
+    //im missing code here ??
     this.something = ((storeToRefs(useTaskStore())).user._rawValue || {}).email
     this.canvas = document.querySelector('canvas')
     this.canvas.width = window.innerWidth * 0.75
@@ -674,4 +675,4 @@ export default {
   font-size: 2vw;
   font-weight: bold;
 }
-</style>
+</style> 
