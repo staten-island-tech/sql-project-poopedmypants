@@ -1,6 +1,5 @@
 <script setup>
 import { supabase } from '../clients/supabase'
-import { ref } from 'vue';
 </script>
 <template>
   <div>

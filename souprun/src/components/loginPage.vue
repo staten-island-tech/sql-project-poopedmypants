@@ -38,14 +38,6 @@ async function loginn(){
 }
 
 </script>
-<script>
-const account = ref();
-
-async function getSession() {
-	account.value = await supabase.auth.getSession();
-  console.log(account.value.data.session.user.user_metadata.username)
-}
-</script>
 
 <style>
 #container{
