@@ -13,11 +13,22 @@ import { supabase } from '../clients/supabase'
 
 import { useTaskStore } from './taskStore.js';
 import { storeToRefs } from 'pinia';
-const { data, error } = await supabase
-  .from('clients')
-  .select('score');
-  const sortedData = data.map((item) => item.score).sort((a, b) => b - a);  
-  const [highestNumber, secondHighestNumber, thirdHighestNumber] = sortedData.slice(0, 3);
+// const insertHs = async () => {
+//            try{        
+//               const { data, error } = await supabase
+//               .from('clients')
+//                .select('score');
+//               const sortedData = data.map((item) => item.score).sort((a, b) => b - a);  
+//               const [highestNumber, secondHighestNumber, thirdHighestNumber] = sortedData.slice(0, 3);
+//               if (data) {
+//                 console.log(data)
+//                 return highestNumber, secondHighestNumber, thirdHighestNumber
+//               }
+//               } catch (error) {
+//                 console.log(error)
+//               }
+//             }
+//             insertHs()
   
 export default {
   data() {
@@ -79,9 +90,13 @@ export default {
       rbtnHeight: 0,
       speeed: null,
       something: null,
+      lba:0,
+      lbb:0,
+      lbc:0,
     }
   },
   mounted() {
+    this.lbsi();
     //im missing code here ??
     this.something = ((storeToRefs(useTaskStore())).user._rawValue || {}).email
     this.canvas = document.querySelector('canvas')
@@ -95,7 +110,7 @@ export default {
     this.makeLeaderBoard()
     this.avatarList = ['/bun.png', '/cat.png', '/hippo.png', '/bundied.png', '/hippodead.png']
     this.makeAvatar()
-    this.lbg()
+    // this.lbg()
     this.obbyImage = new Image()
     this.obbyImage.src = '/obby1.png'
     this.speed = this.canvas.width / 100
@@ -170,6 +185,27 @@ export default {
     }
   },
   methods: {
+    lbsi(){
+      const insertHs = async () => {
+           try{        
+              const { data, error } = await supabase
+              .from('clients')
+               .select('score');
+              const sortedData = data.map((item) => item.score).sort((a, b) => b - a);  
+              const [highestNumber, secondHighestNumber, thirdHighestNumber] = sortedData.slice(0, 3);
+              this.lba = highestNumber
+              this.lbb = secondHighestNumber
+              this.lbc = thirdHighestNumber
+              if (data) {
+                console.log(data)
+                this.lbg();
+              }
+              } catch (error) {
+                console.log(error)
+              }
+            }
+            insertHs();
+    },
     lbg(){
      this.first() 
      this.second()
@@ -184,7 +220,7 @@ export default {
       if (this.started === false) {
           this.fs = this.canvas.width / 35 + 'px Cute Font, cursive'
           this.ctx.font = this.fs
-          this.ctx.fillText(highestNumber, this.lbx, this.firstY)
+          this.ctx.fillText(this.lba, this.lbx, this.firstY)
           this.lbx = this.canvas.width / 7
           this.firstY = this.conBottom * 1.54
           this.ctx.fillStyle = 'rgba(104,22,22,255)'
@@ -195,7 +231,7 @@ export default {
       if (this.started === false) {
           this.fs = this.canvas.width / 35 + 'px Cute Font, cursive'
           this.ctx.font = this.fs
-          this.ctx.fillText(secondHighestNumber, this.secondx, this.secondY)
+          this.ctx.fillText(this.lbb, this.secondx, this.secondY)
           this.secondx = this.canvas.width / 8
           this.secondY = this.conBottom * 2
           this.ctx.fillStyle = 'rgba(104,22,22,255)'
@@ -206,7 +242,7 @@ export default {
       if (this.started === false) {
           this.fs = this.canvas.width / 35 + 'px Cute Font, cursive'
           this.ctx.font = this.fs
-          this.ctx.fillText(thirdHighestNumber, this.secondx, this.thirdY)
+          this.ctx.fillText(this.lbc, this.secondx, this.thirdY)
           this.secondx = this.canvas.width / 8
           this.thirdY = this.conBottom * 2.38
           this.ctx.fillStyle = 'rgba(104,22,22,255)'
@@ -543,7 +579,7 @@ export default {
       this.avatarX = this.canvas.width / 1.5
       this.avatarY = this.conBottom - this.canvas.width * 0.1
       this.newAvatarY = this.conBottom + this.canvas.width * 0.05
-      this.lbg()
+      this.lbsi();
       this.ctx.drawImage(
         this.avatar,
         this.avatarX,
