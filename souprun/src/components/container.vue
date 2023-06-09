@@ -13,6 +13,22 @@ import { supabase } from '../clients/supabase'
 
 import { useTaskStore } from './taskStore.js';
 import { storeToRefs } from 'pinia';
+// const insertHs = async () => {
+//            try{        
+//               const { data, error } = await supabase
+//               .from('clients')
+//                .select('score');
+//               const sortedData = data.map((item) => item.score).sort((a, b) => b - a);  
+//               const [highestNumber, secondHighestNumber, thirdHighestNumber] = sortedData.slice(0, 3);
+//               if (data) {
+//                 console.log(data)
+//                 return highestNumber, secondHighestNumber, thirdHighestNumber
+//               }
+//               } catch (error) {
+//                 console.log(error)
+//               }
+//             }
+//             insertHs()
   
 export default {
   data() {
