@@ -14,6 +14,12 @@ import { ref } from 'vue';
 
 import { useTaskStore } from './taskStore.js';
 import { storeToRefs } from 'pinia';
+const { data, error } = await supabase
+  .from('clients')
+  .select('score');
+  const sortedData = data.map((item) => item.score).sort((a, b) => b - a);  
+  const [highestNumber, secondHighestNumber, thirdHighestNumber] = sortedData.slice(0, 3);
+  
 export default {
   data() {
     //very sorry for all these variables .-.
@@ -178,7 +184,7 @@ export default {
       if (this.started === false) {
           this.fs = this.canvas.width / 35 + 'px Cute Font, cursive'
           this.ctx.font = this.fs
-          this.ctx.fillText("69999999999", this.lbx, this.firstY)
+          this.ctx.fillText(highestNumber, this.lbx, this.firstY)
           this.lbx = this.canvas.width / 7
           this.firstY = this.conBottom * 1.54
           this.ctx.fillStyle = 'rgba(104,22,22,255)'
@@ -189,7 +195,7 @@ export default {
       if (this.started === false) {
           this.fs = this.canvas.width / 35 + 'px Cute Font, cursive'
           this.ctx.font = this.fs
-          this.ctx.fillText("55555555", this.secondx, this.secondY)
+          this.ctx.fillText(secondHighestNumber, this.secondx, this.secondY)
           this.secondx = this.canvas.width / 8
           this.secondY = this.conBottom * 2
           this.ctx.fillStyle = 'rgba(104,22,22,255)'
@@ -200,7 +206,7 @@ export default {
       if (this.started === false) {
           this.fs = this.canvas.width / 35 + 'px Cute Font, cursive'
           this.ctx.font = this.fs
-          this.ctx.fillText("666666", this.secondx, this.thirdY)
+          this.ctx.fillText(thirdHighestNumber, this.secondx, this.thirdY)
           this.secondx = this.canvas.width / 8
           this.thirdY = this.conBottom * 2.38
           this.ctx.fillStyle = 'rgba(104,22,22,255)'
