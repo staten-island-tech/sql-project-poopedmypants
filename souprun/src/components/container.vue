@@ -14,7 +14,6 @@ import { ref } from 'vue';
 
 import { useTaskStore } from './taskStore.js';
 import { storeToRefs } from 'pinia';
-
 export default {
   data() {
     //very sorry for all these variables .-.
@@ -78,10 +77,14 @@ export default {
       lba:0,
       lbb:0,
       lbc:0,
+      firstUsername: "",
+      secondUsername: "",
+      thirdUsername: "",
     }
   },
   mounted() {
     this.lbsi();
+    this.lbsiU();
     //im missing code here ??
     this.something = ((storeToRefs(useTaskStore())).user._rawValue || {}).email
     this.canvas = document.querySelector('canvas')
@@ -579,6 +582,7 @@ export default {
       this.avatarY = this.conBottom - this.canvas.width * 0.1
       this.newAvatarY = this.conBottom + this.canvas.width * 0.05
       this.lbsi();
+      this.lbsiU();
       this.ctx.drawImage(
         this.avatar,
         this.avatarX,
