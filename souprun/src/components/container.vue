@@ -58,7 +58,7 @@ export default {
       testerx: 0,
       hippox: 0,
       bunx: 0,
-      gameOver: false,
+      gameOver: true,
       gos: null,
       gosX: 0,
       gosY: 0,
