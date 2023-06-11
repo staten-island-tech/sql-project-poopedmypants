@@ -178,8 +178,8 @@ export default {
            try{        
               const { data, error } = await supabase
               .from('clients')
-               .select('score');
-              const sortedData = data.map((item) => item.score).sort((a, b) => b - a);  
+               .select('*');
+              const sortedData = data.sort((a,b) => b.score - a.score)
               const [highestNumber, secondHighestNumber, thirdHighestNumber] = sortedData.slice(0, 3);
               this.lba = highestNumber
               this.lbb = secondHighestNumber
@@ -200,10 +200,11 @@ export default {
               const { data, error } = await supabase
               .from('clients')
                .select('username');
-              
-               this.lba.username = this.firstUsername
+
+              this.lba.username = this.firstUsername
               this.lbb.username = this.secondUsername
               this.lbc.username = this.thirdUsername
+
               if (data) {
                 console.log(data)
                 this.lbg();
@@ -228,7 +229,7 @@ export default {
       if (this.started === false) {
           this.fs = this.canvas.width / 35 + 'px Cute Font, cursive'
           this.ctx.font = this.fs
-          this.ctx.fillText(this.lba, this.lbx, this.firstY)
+          this.ctx.fillText(this.lba.score, this.lbx, this.firstY)
           this.lbx = this.canvas.width / 7
           this.firstY = this.conBottom * 1.54
           this.ctx.fillStyle = 'rgba(104,22,22,255)'
@@ -239,7 +240,7 @@ export default {
       if (this.started === false) {
           this.fs = this.canvas.width / 35 + 'px Cute Font, cursive'
           this.ctx.font = this.fs
-          this.ctx.fillText(this.lbb, this.secondx, this.secondY)
+          this.ctx.fillText(this.lbb.score, this.secondx, this.secondY)
           this.secondx = this.canvas.width / 8
           this.secondY = this.conBottom * 2
           this.ctx.fillStyle = 'rgba(104,22,22,255)'
@@ -250,7 +251,7 @@ export default {
       if (this.started === false) {
           this.fs = this.canvas.width / 35 + 'px Cute Font, cursive'
           this.ctx.font = this.fs
-          this.ctx.fillText(this.lbc, this.secondx, this.thirdY)
+          this.ctx.fillText(this.lbc.score, this.secondx, this.thirdY)
           this.secondx = this.canvas.width / 8
           this.thirdY = this.conBottom * 2.38
           this.ctx.fillStyle = 'rgba(104,22,22,255)'
@@ -261,7 +262,7 @@ export default {
       if (this.started === false) {
           this.fss = this.canvas.width / 50 + 'px Cute Font, cursive'
           this.ctx.font = this.fss
-          this.ctx.fillText(this.firstUsername, this.dikx, this.dikY)
+          this.ctx.fillText(this.lba.username, this.dikx, this.dikY)
           this.dikx = this.canvas.width / 3.85
           this.dikY = this.conBottom * 1.7
           this.ctx.fillStyle = 'rgba(104,22,22,255)'
@@ -272,7 +273,7 @@ export default {
       if (this.started === false) {
           this.fss = this.canvas.width / 50 + 'px Cute Font, cursive'
           this.ctx.font = this.fss
-          this.ctx.fillText(this.secondUsername, this.difx, this.difY)
+          this.ctx.fillText(this.lbb.username, this.difx, this.difY)
           this.difx = this.canvas.width / 3.7
           this.difY = this.conBottom * 2.12
           this.ctx.fillStyle = 'rgba(104,22,22,255)'
@@ -283,7 +284,7 @@ export default {
       if (this.started === false) {
           this.fss = this.canvas.width / 50 + 'px Cute Font, cursive'
           this.ctx.font = this.fss
-          this.ctx.fillText(this.thirdUsername, this.difx, this.digY)
+          this.ctx.fillText(this.lbc.username, this.difx, this.digY)
           this.difx = this.canvas.width / 3.7
           this.digY = this.conBottom * 2.5
           this.ctx.fillStyle = 'rgba(104,22,22,255)'
