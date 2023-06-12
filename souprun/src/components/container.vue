@@ -80,12 +80,14 @@ export default {
       firstUsername: "",
       secondUsername: "",
       thirdUsername: "",
+      highhhhh:"",
+      radius: 0,
     }
   },
   mounted() {
+    this.getHighscore();
     this.lbsi();
     this.lbsiU();
-    //im missing code here ??
     this.something = ((storeToRefs(useTaskStore())).user._rawValue || {}).email
     this.canvas = document.querySelector('canvas')
     this.canvas.width = window.innerWidth * 0.75
@@ -98,7 +100,6 @@ export default {
     this.makeLeaderBoard()
     this.avatarList = ['/bun.png', '/cat.png', '/hippo.png', '/bundied.png', '/hippodead.png', 'catdeath.png']
     this.makeAvatar()
-    // this.lbg()
     this.obbyImage = new Image()
     this.obbyImage.src = '/obby1.png'
     this.speed = this.canvas.width / 100
@@ -160,8 +161,10 @@ export default {
               }
             }
             insertClients()
+            this.getHighscore();
           this.avatar.src = this.avatarList[this.i]
           this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height)
+          this.goScreen()
           this.ctx.drawImage(this.bowl, this.bowlX, this.conBottom, this.bowlWidth, this.bowlHeight)
           this.ctx.drawImage(this.obbyImage, this.x, this.y, this.width, this.height)
           this.ctx.drawImage(
@@ -176,6 +179,28 @@ export default {
     }
   },
   methods: {
+    getHighscore(){
+    const gettaHighscore = async () => {
+    try {
+      const { data, error } = await supabase
+        .from('clients')
+        .select('score')
+        .eq('email', this.something);
+
+      if (error) {
+        throw new Error(error.message);
+      }
+
+      // Process the fetched data
+      console.log(this.something)
+      console.log(data[0].score);
+      this.highhhhh = data[0].score
+    } catch (error) {
+      console.error(error);
+    }
+  }
+  gettaHighscore();
+},
     lbsi(){
       const insertHs = async () => {
            try{        
@@ -188,7 +213,6 @@ export default {
               this.lbb = secondHighestNumber
               this.lbc = thirdHighestNumber
               if (data) {
-                console.log(data)
                 this.lbg();
               }
               } catch (error) {
@@ -209,7 +233,6 @@ export default {
               this.lbc.username = this.thirdUsername
 
               if (data) {
-                console.log(data)
                 this.lbg();
               }
               } catch (error) {
@@ -298,7 +321,7 @@ export default {
       if (this.started === false) {
           this.fsss = this.canvas.width / 30 + 'px Cute Font, cursive'
           this.ctx.font = this.fsss
-          this.ctx.fillText("TBA", this.hsx, this.hsY)
+          this.ctx.fillText(this.highhhhh, this.hsx, this.hsY)
           this.hsx = this.canvas.width / 11
           this.hsY = this.conBottom * 3
           this.ctx.fillStyle = 'rgba(104,22,22,255)'
@@ -306,6 +329,7 @@ export default {
         }
     },
     goScreen() {
+      this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height)
       this.gos = new Image()
       this.gos.src = '/gameover.png'
       this.gos.onload = () => {
@@ -433,9 +457,10 @@ export default {
     p() {
       if (this.started === false) {
         if (this.gosup === true) {
+          
           this.fs = this.canvas.width / 35 + 'px Cute Font, cursive'
           this.ctx.font = this.fs
-          this.ctx.fillText('placeholder for highscore', this.gohscoreX, this.gohscoreY)
+          this.ctx.fillText(this.highhhhh, this.gohscoreX, this.gohscoreY)
           this.gohscoreX = this.canvas.width / 1.4
           this.gohscoreY = this.conBottom * 1.88
           this.ctx.fillStyle = 'rgba(104,22,22,255)'
@@ -454,7 +479,6 @@ export default {
         this.gameOver = true
         this.gosup = true
         this.started = false
-        this.goScreen()
       }
     },
     startTimer() {
