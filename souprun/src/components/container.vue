@@ -96,7 +96,7 @@ export default {
     this.canvas.addEventListener('click', this.clicked)
     this.makeBowl()
     this.makeLeaderBoard()
-    this.avatarList = ['/bun.png', '/cat.png', '/hippo.png', '/bundied.png', '/hippodead.png']
+    this.avatarList = ['/bun.png', '/cat.png', '/hippo.png', '/bundied.png', '/hippodead.png', 'catdeath.png']
     this.makeAvatar()
     // this.lbg()
     this.obbyImage = new Image()
@@ -139,6 +139,9 @@ export default {
           }
           if (this.i === 2) {
             this.i = 4
+          }
+          if (this.i === 1) {
+            this.i = 5
           }
           const insertClients = async () => {
            try{        
@@ -569,6 +572,9 @@ export default {
       }
       if (this.i === 4) {
         this.i = 2
+      }
+      if (this.i === 5) {
+        this.i = 1
       }
       this.avatar.src = this.avatarList[this.i]
       this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height)
