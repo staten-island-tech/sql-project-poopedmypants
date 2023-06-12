@@ -81,7 +81,6 @@ export default {
       secondUsername: "",
       thirdUsername: "",
       highhhhh:"",
-      radius: 0,
     }
   },
   mounted() {
@@ -508,6 +507,7 @@ export default {
         this.moveObstacles()
       }
     },
+    
     moveObstacles() {
       const delay = Math.floor(Math.random() * 0) + 1000
       if (this.started) {
