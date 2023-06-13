@@ -1,6 +1,3 @@
-<script setup>
-import { supabase } from '../clients/supabase'
-</script>
 <template>
   <div>
     <!-- <score :started="started"/> -->
@@ -10,7 +7,7 @@ import { supabase } from '../clients/supabase'
 </template>
 
 <script>
-
+import { supabase } from '../clients/supabase'
 import { useTaskStore } from './taskStore.js';
 import { storeToRefs } from 'pinia';
   
@@ -178,7 +175,7 @@ export default {
     }
   },
   methods: {
-    getHighscore(){
+  getHighscore(){
     const gettaHighscore = async () => {
     try {
       const { data, error } = await supabase
@@ -192,6 +189,9 @@ export default {
 
       // Process the fetched data
       console.log(this.something)
+      if (length.data < 1 ) {
+        return 
+      }
       console.log(data[0].score);
       this.highhhhh = data[0].score
     } catch (error) {
